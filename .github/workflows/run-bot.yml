@@ -37,7 +37,7 @@ jobs:
           # Secrets (configuralos en GitHub -> Settings -> Secrets)
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASS: ${{ secrets.GMAIL_PASS }}
-          # Si querés pasar otras variables, agregalas acá o como Secrets.
+          # Forzar headless en CI (lo usa el bot.py para setear flags)
+          HEADLESS: "1"
         run: |
-          # Opcional: forzar modo headless si tu bot lo soporta (descomenta en bot.py)
           python bot.py
