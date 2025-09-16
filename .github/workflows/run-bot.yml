@@ -1,0 +1,43 @@
+name: Run Lohas Transfer Bot
+
+on:
+  workflow_dispatch: # permite ejecutar manualmente desde GitHub > Actions > Run workflow
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Upgrade pip & install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Google Chrome (needed for Selenium)
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y wget gnupg
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          sudo apt-get update -y
+          sudo apt-get install -y google-chrome-stable
+
+      - name: (Optional) show Chrome version
+        run: google-chrome --version || true
+
+      - name: Run bot.py
+        env:
+          # Secrets (configuralos en GitHub -> Settings -> Secrets)
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_PASS: ${{ secrets.GMAIL_PASS }}
+          # Si querés pasar otras variables, agregalas acá o como Secrets.
+        run: |
+          # Opcional: forzar modo headless si tu bot lo soporta (descomenta en bot.py)
+          python bot.py
