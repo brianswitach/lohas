@@ -1,0 +1,3 @@
+selenium
+webdriver-manager
+# agrega aquí cualquier otra dependencia de bot.py
