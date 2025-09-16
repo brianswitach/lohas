@@ -25,9 +25,6 @@ import time
 import imaplib
 import email
 import email.header
-import tempfile
-import shutil
-import uuid
 from typing import List, Optional, Tuple, Callable
 
 # Selenium + webdriver-manager
@@ -1063,65 +1060,53 @@ def click_confirm_button(driver: webdriver.Chrome, wait: WebDriverWait, timeout:
         return False
 
 # ---------------------------
-# Opción B (secuencia principal)
+# Opción B (secuencia principal) - inicialización del driver mejorada para CI
 # ---------------------------
 def opcion_b_selenium():
     print("== Opción B: Selenium + Chrome WebDriver con OTP Gmail IMAP (DEBUG) ==")
 
-    tmp_user_dir = None
     driver = None
 
     # Configuración de ChromeOptions robusta para CI
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
 
-    # Si HEADLESS está seteado en entorno (ej. en GitHub Actions), activamos flags útiles
+    # Flags útiles para entornos CI (evitan bloqueos por sandbox / memoria compartida)
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--remote-debugging-port=9222")
+
+    # Si HEADLESS está seteado en entorno, activamos headless
     headless_env = os.getenv("HEADLESS", "")
     if headless_env and headless_env.lower() in ("1", "true", "yes"):
-        # Preferimos --headless=new si la versión lo soporta; si no, se ignora
         try:
             options.add_argument("--headless=new")
         except Exception:
-            try:
-                options.add_argument("--headless")
-            except Exception:
-                pass
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--disable-gpu")
-        options.add_argument("--remote-debugging-port=9222")
+            options.add_argument("--headless")
 
-    # Crear un user-data-dir temporal y único para evitar el error:
-    # "user data directory is already in use"
+    # Intento 1: iniciar Chrome normalmente (sin pasar user-data-dir)
     try:
-        tmp_user_dir = tempfile.mkdtemp(prefix="chrome-user-data-")
-        options.add_argument(f"--user-data-dir={tmp_user_dir}")
-        # También creamos un perfil de sesión único (opcional)
-        unique_profile = f"profile-{uuid.uuid4().hex[:8]}"
-        options.add_argument(f"--profile-directory={unique_profile}")
-    except Exception as e:
-        print("[SELENIUM] No pude crear user-data-dir temporal; procedo sin él:", e)
-        tmp_user_dir = None
-
-    try:
+        print("[SELENIUM] Iniciando Chrome WebDriver (intento 1, sin user-data-dir)...")
         driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
     except Exception as e:
-        print("[SELENIUM] Error iniciando Chrome WebDriver:", e)
-        # intentar una segunda vez forzando headless si no estaba
-        if not (headless_env and headless_env.lower() in ("1", "true", "yes")):
+        print("[SELENIUM] Error iniciando Chrome WebDriver (intento 1):", e)
+        # Si falla, reintentamos con flags forzados (headless)
+        try:
+            print("[SELENIUM] Reintentando iniciar WebDriver con flags forzados (intento 2)...")
+            options2 = webdriver.ChromeOptions()
+            options2.add_argument("--no-sandbox")
+            options2.add_argument("--disable-dev-shm-usage")
+            options2.add_argument("--disable-gpu")
+            options2.add_argument("--remote-debugging-port=9222")
             try:
-                print("[SELENIUM] Intento de reintento activando headless y flags...")
-                options.add_argument("--headless=new")
-                options.add_argument("--no-sandbox")
-                options.add_argument("--disable-dev-shm-usage")
-                options.add_argument("--disable-gpu")
-                options.add_argument("--remote-debugging-port=9222")
-                driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
-            except Exception as e2:
-                print("[SELENIUM] Reintento falló:", e2)
-                # si no se puede iniciar, re-raise para que el caller vea el stack y action falle.
-                raise
-        else:
+                options2.add_argument("--headless=new")
+            except Exception:
+                options2.add_argument("--headless")
+            driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options2)
+            print("[SELENIUM] Driver iniciado en intento 2.")
+        except Exception as e2:
+            print("[SELENIUM] Reintento falló también:", e2)
             raise
 
     try:
@@ -1464,13 +1449,6 @@ def opcion_b_selenium():
                 driver.quit()
         except Exception:
             pass
-        # limpiar user-data-dir temporal si lo creamos
-        try:
-            if tmp_user_dir and os.path.exists(tmp_user_dir):
-                shutil.rmtree(tmp_user_dir, ignore_errors=True)
-                print("[SELENIUM] Borrado user-data-dir temporal:", tmp_user_dir)
-        except Exception as e:
-            print("[SELENIUM] No pude borrar tmp user-data-dir:", e)
 
 # ---------------------------
 # MAIN (solo opción B)

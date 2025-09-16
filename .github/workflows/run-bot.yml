@@ -1,7 +1,7 @@
 name: Run Lohas Transfer Bot
 
 on:
-  workflow_dispatch: # permite ejecutar manualmente desde GitHub > Actions > Run workflow
+  workflow_dispatch:
 
 jobs:
   run-bot:
@@ -34,10 +34,8 @@ jobs:
 
       - name: Run bot.py
         env:
-          # Secrets (configuralos en GitHub -> Settings -> Secrets)
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASS: ${{ secrets.GMAIL_PASS }}
-          # Forzar headless en CI (lo usa el bot.py para setear flags)
           HEADLESS: "1"
         run: |
           python bot.py
