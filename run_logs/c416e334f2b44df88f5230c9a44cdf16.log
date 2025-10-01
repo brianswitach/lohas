@@ -1,0 +1,11 @@
+[csv] open login
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/bot_csv.py", line 106, in <module>
+    sys.exit(0 if run_flow() else 1)
+                  ~~~~~~~~^^
+  File "/Users/brianswitach/lohas/bot_csv.py", line 94, in run_flow
+    otp=wait_otp(baseline); print("[csv] otp:",otp); otp_in.send_keys(otp)
+  File "/Users/brianswitach/lohas/bot_csv.py", line 51, in wait_otp
+    time.sleep(OTP_POLL_S); m.select("INBOX")
+    ~~~~~~~~~~^^^^^^^^^^^^
+KeyboardInterrupt

@@ -1,0 +1,786 @@
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Exception ignored in: <function Service.__del__ at 0x1054eb100>
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 196, in __del__
+    self.stop()
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 156, in stop
+    self._terminate_process()
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2062, in _wait
+    time.sleep(delay)
+KeyboardInterrupt: 
+PASADA_FINALIZADA:Pass 1 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=55385']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 2 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=56435']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 3 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=57769']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 4 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=58949']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 5 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=60137']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 6 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=61170']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 7 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=62412']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 8 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=63741']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 9 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=64798']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 10 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=49450']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 11 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=50497']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 12 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=51556']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 13 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=52790']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 14 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=53921']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 15 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=54967']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 16 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=56007']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 17 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=57163']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 18 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=58228']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 19 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=59407']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 20 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=60637']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 21 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=61726']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 22 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=62792']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 23 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=63861']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 24 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=64894']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 25 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=49636']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 26 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=50687']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 27 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=51792']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 28 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=52836']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 29 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=53861']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 30 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=54899']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 31 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=55928']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 32 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=56954']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 33 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=57992']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 34 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=59039']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 35 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=60089']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 36 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=61113']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 37 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=62161']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 38 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=63248']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 39 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=64298']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 40 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=65370']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 41 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=50010']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 42 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=51033']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 43 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=52108']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 44 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=53212']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 45 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=54356']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 46 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=55446']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 47 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=56520']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 48 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+    ~~~~~~~~~~~~~~~~~^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2060, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['/Users/brianswitach/.wdm/drivers/chromedriver/mac64/140.0.7339.207/chromedriver-mac-arm64/chromedriver', '--port=57610']' timed out after 60 seconds
+PASADA_FINALIZADA:Pass 49 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+PASADA_FINALIZADA:Pass 50 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: WebDriverException()
+TRANSFE_FAILED:1
+PASADA_FINALIZADA:Pass 51 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+TRANSFE_FAILED:1
+PASADA_FINALIZADA:Pass 52 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+TRANSFE_FAILED:1
+PASADA_FINALIZADA:Pass 53 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+TRANSFE_FAILED:1
+PASADA_FINALIZADA:Pass 54 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+TRANSFE_FAILED:1
+PASADA_FINALIZADA:Pass 55 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+TRANSFE_FAILED:1
+PASADA_FINALIZADA:Pass 56 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+TRANSFE_FAILED:1
+PASADA_FINALIZADA:Pass 57 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+TRANSFE_FAILED:1
+PASADA_FINALIZADA:Pass 58 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+TRANSFE_FAILED:1
+PASADA_FINALIZADA:Pass 59 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+ERROR al crear ChromeDriver: SessionNotCreatedException()
+TRANSFE_FAILED:1
+PASADA_FINALIZADA:Pass 60 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+TRANSFE_FAILED:1
+PASADA_FINALIZADA:Pass 61 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+TRANSFE_FAILED:1
+PASADA_FINALIZADA:Pass 62 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+TRANSFE_FAILED:1
+PASADA_FINALIZADA:Pass 63 — Completadas: none — Fallidas: 1
+TRANSFE_START:1
+TRANSFE_FAILED:1
+PASADA_FINALIZADA:Pass 64 — Completadas: none — Fallidas: 1
+TRANSFE_START:1

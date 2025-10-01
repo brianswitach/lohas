@@ -1,1 +1,0 @@
-# Lohas Transfer Bot

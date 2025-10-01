@@ -1,0 +1,265 @@
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Exception ignored in: <function Service.__del__ at 0x101da7100>
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 196, in __del__
+    self.stop()
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 156, in stop
+    self._terminate_process()
+  File "/Users/brianswitach/lohas/venv/lib/python3.13/site-packages/selenium/webdriver/common/service.py", line 179, in _terminate_process
+    self.process.wait(60)
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1276, in wait
+    return self._wait(timeout=timeout)
+  File "/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 2062, in _wait
+    time.sleep(delay)
+KeyboardInterrupt: 
+Pasada finalizada — Pass 1 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 2 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 3 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 4 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 5 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 6 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 7 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 8 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 9 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 10 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 11 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 12 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 13 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 14 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 15 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 16 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 17 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 18 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 19 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 20 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 21 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 22 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 23 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 24 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 25 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 26 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 27 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 28 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 29 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 30 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 31 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 32 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 33 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 34 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 35 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 36 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 37 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 38 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 39 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 40 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 41 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 42 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 43 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 44 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 45 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 46 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 47 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 48 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 49 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 50 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 51 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 52 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 53 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 54 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 55 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 56 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Service process refused to terminate gracefully with SIGTERM, escalating to SIGKILL.
+Pasada finalizada — Pass 57 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 58 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 59 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 60 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 61 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 62 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 63 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 64 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 65 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1

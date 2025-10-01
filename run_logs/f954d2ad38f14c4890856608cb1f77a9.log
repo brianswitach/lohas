@@ -1,0 +1,24 @@
+TRANSFE_START:1
+TRANSFE_FAILED:1
+Error: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=140.0.7339.213)
+Stacktrace:
+0   chromedriver                        0x0000000100a8b274 cxxbridge1$str$ptr + 2882596
+1   chromedriver                        0x0000000100a831a0 cxxbridge1$str$ptr + 2849616
+2   chromedriver                        0x00000001005ad180 _RNvCslE4myv9Sbr3_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 73420
+3   chromedriver                        0x0000000100587158 chromedriver + 143704
+4   chromedriver                        0x000000010061c560 _RNvCslE4myv9Sbr3_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 529068
+5   chromedriver                        0x0000000100635228 _RNvCslE4myv9Sbr3_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 630644
+6   chromedriver                        0x00000001005e8188 _RNvCslE4myv9Sbr3_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 315092
+7   chromedriver                        0x0000000100a4ec54 cxxbridge1$str$ptr + 2635268
+8   chromedriver                        0x0000000100a51e6c cxxbridge1$str$ptr + 2648092
+9   chromedriver                        0x0000000100a305d4 cxxbridge1$str$ptr + 2510724
+10  chromedriver                        0x0000000100a52718 cxxbridge1$str$ptr + 2650312
+11  chromedriver                        0x0000000100a21d7c cxxbridge1$str$ptr + 2451244
+12  chromedriver                        0x0000000100a71dd4 cxxbridge1$str$ptr + 2779012
+13  chromedriver                        0x0000000100a71f54 cxxbridge1$str$ptr + 2779396
+14  chromedriver                        0x0000000100a82dec cxxbridge1$str$ptr + 2848668
+15  libsystem_pthread.dylib             0x0000000199a71f94 _pthread_start + 136
+16  libsystem_pthread.dylib             0x0000000199a6cd34 thread_start + 8
+

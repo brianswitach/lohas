@@ -1,0 +1,11 @@
+[csv] open login
+Traceback (most recent call last):
+  File "/Users/brianswitach/lohas/bot_csv.py", line 106, in <module>
+    sys.exit(0 if run_flow() else 1)
+                  ~~~~~~~~^^
+  File "/Users/brianswitach/lohas/bot_csv.py", line 94, in run_flow
+    otp=wait_otp(baseline); print("[csv] otp:",otp); otp_in.send_keys(otp)
+  File "/Users/brianswitach/lohas/bot_csv.py", line 52, in wait_otp
+    m.logout(); raise TimeoutError("OTP timeout")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TimeoutError: OTP timeout
