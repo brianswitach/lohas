@@ -60,6 +60,12 @@ def _minimal_print(*args, sep=' ', end='\n', file=None, flush=False):
             _orig_print(f"Fallida la Transferencia #{n}", end=end, file=file, flush=flush)
         except Exception:
             pass
+    elif msg.startswith("ERROR_DEBUG:"):
+        try:
+            debug_msg = msg.split(":", 1)[1]
+            _orig_print(f"DEBUG: {debug_msg}", end=end, file=file, flush=flush)
+        except Exception:
+            pass
     elif msg == "RESEND_PRESSED":
         _orig_print("Se apreta a reenviar código", end=end, file=file, flush=flush)
     elif msg.startswith("RESEND_FAILED:"):
@@ -83,7 +89,7 @@ builtins.print = _minimal_print
 # Selenium + webdriver-manager
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service as ChromeService
+# from selenium.webdriver.chrome.service import Service as ChromeService  # Not available in Selenium 3.x
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, WebDriverException
@@ -132,7 +138,7 @@ GMAIL_USER = "brianswitach@gmail.com"
 GMAIL_PASS = "nlrsuamujfrictoh"
 
 # Habilitar/deshabilitar modo headless -> Cambia a True para activar headless.
-HEADLESS = False
+HEADLESS = True
 
 # regex para extraer OTP (frase exacta y fallback dígitos)
 OTP_PHRASE_RE = re.compile(r"su\s+c[oó]digo\s+de\s+inicio\s+de\s+sesi[oó]n\s+es\s*[:\s,-]*?(\d{4,8})", re.I)
@@ -1105,29 +1111,51 @@ def opcion_b_selenium() -> bool:
     """
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--disable-web-security")
+    options.add_argument("--disable-features=VizDisplayCompositor")
+    options.add_argument("--remote-debugging-port=0")  # Use random port
     if HEADLESS:
         # usar modo headless moderno si disponible
         options.add_argument("--headless=new")
 
-    driver = webdriver.Chrome(
-    service=ChromeService(
-        ChromeDriverManager(driver_version="140.0.7339.214").install()
-    ),
-    options=options
-)
+    # Fix ChromeDriver timeout issues by using a stable version
+    try:
+        # Clear cache and get latest compatible version
+        driver = webdriver.Chrome(
+            executable_path=ChromeDriverManager().install(),
+            options=options
+        )
+    except Exception as e:
+        print(f"ERROR_DEBUG:ChromeDriverManager falló: {str(e)}")
+        # Fallback to system chromedriver if available
+        driver = webdriver.Chrome(
+            executable_path="chromedriver",
+            options=options
+        )
+    
+    # Set proper timeouts to prevent hanging
+    driver.set_page_load_timeout(60)
+    driver.implicitly_wait(10)
 
     success = False
     try:
+        print("ERROR_DEBUG:Iniciando navegación del navegador")
         driver.get(URL_B)
         wait = WebDriverWait(driver, 30)
+        print("ERROR_DEBUG:Página cargada, buscando campos de login")
 
         # Usuario
+        print("ERROR_DEBUG:Buscando campo de usuario")
         user_input = wait.until(EC.presence_of_element_located((By.ID, FIELD_LOGIN_ID)))
         try:
             user_input.clear()
         except Exception:
             pass
         user_input.send_keys(USER_B)
+        print("ERROR_DEBUG:Usuario ingresado")
 
         # Password
         pass_input = wait.until(EC.presence_of_element_located((By.ID, FIELD_PASS_ID)))
@@ -1318,7 +1346,7 @@ def opcion_b_selenium() -> bool:
 
         # Pegar código en input token_cliente
         try:
-            token_el = locate_element_across_frames(driver, By.ID, TOKEN_FIELD_ID, timeout=20)
+            token_el = locate_element_across_frames(driver, By.ID, TOKEN_FIELD_ID, timeout=75)
             if token_el:
                 try:
                     # clic izquierdo en el input, espera 2s, como pediste
@@ -1327,7 +1355,21 @@ def opcion_b_selenium() -> bool:
                     except Exception:
                         safe_click_element(driver, token_el)
                     time.sleep(2)
-                    set_input_value(driver, token_el, transfer_code)
+                    
+                    # Timeout de 1 minuto 15 segundos para pegar el token
+                    start_time = time.time()
+                    token_pasted = False
+                    
+                    while time.time() - start_time < 75:  # 75 segundos = 1 minuto 15 segundos
+                        if transfer_code:  # Si ya tenemos el código, pegarlo
+                            set_input_value(driver, token_el, transfer_code)
+                            token_pasted = True
+                            break
+                        time.sleep(1)  # Esperar 1 segundo y verificar de nuevo
+                    
+                    if not token_pasted:
+                        return False  # Timeout: no se pudo pegar el token en 75 segundos
+                    
                     time.sleep(3)
                 except Exception:
                     return False
@@ -1389,7 +1431,8 @@ def main():
             print(f"TRANSFE_FAILED:{i}")
             failed.append(i)
             raise
-        except Exception:
+        except Exception as e:
+            print(f"ERROR_DEBUG:Excepción en bucle principal: {str(e)}")
             print(f"TRANSFE_FAILED:{i}")
             failed.append(i)
         # esperar 2 segundos entre ventanas (pasada inicial)
@@ -1426,7 +1469,8 @@ def main():
                 print(f"TRANSFE_FAILED:{t}")
                 failed_this_pass.append(t)
                 raise
-            except Exception:
+            except Exception as e:
+                print(f"ERROR_DEBUG:Excepción en bucle de reintentos: {str(e)}")
                 print(f"TRANSFE_FAILED:{t}")
                 failed_this_pass.append(t)
                 time.sleep(3)

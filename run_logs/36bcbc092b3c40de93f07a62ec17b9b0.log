@@ -1,0 +1,118 @@
+DEBUG: ===== INICIANDO FUNCIÓN main =====
+DEBUG: SCAN_ONLY = None
+DEBUG: DATE_FROM = None
+DEBUG: DATE_TO = None
+DEBUG: HEADLESS = None
+DEBUG: ACCOUNT_SEL = None
+DEBUG: PYTHONUNBUFFERED = 1
+DEBUG: Modo normal - iniciando transferencia
+Arranca la Transferencia #1
+DEBUG: Llamando a login_otp()...
+DEBUG: ===== INICIANDO PROCESO DE LOGIN OTP =====
+DEBUG: No se configuraron fechas - solo proceso OTP
+DEBUG: Iniciando proceso de login...
+DEBUG: Navegando a URL: https://app.lohas.eco/app_Login
+DEBUG: URL actual después de navegar: https://app.lohas.eco/app_Login
+DEBUG: Buscando campo de usuario: id_sc_field_login
+DEBUG: Campo de usuario encontrado: <selenium.webdriver.remote.webelement.WebElement (session="96326558996090186acf7cfad50e2ede", element="f.D8CC67B42D4123CF95B9A242C49472C6.d.9CEC3E728039C30CE6FE2236EB48C6D5.e.15")>
+DEBUG: Usuario ingresado: briansw
+DEBUG: Buscando campo de contraseña: id_sc_field_pswd
+DEBUG: Campo de contraseña encontrado: <selenium.webdriver.remote.webelement.WebElement (session="96326558996090186acf7cfad50e2ede", element="f.D8CC67B42D4123CF95B9A242C49472C6.d.9CEC3E728039C30CE6FE2236EB48C6D5.e.16")>
+DEBUG: Contraseña ingresada
+DEBUG: Buscando botón de login...
+DEBUG: Botón de login encontrado: <selenium.webdriver.remote.webelement.WebElement (session="96326558996090186acf7cfad50e2ede", element="f.D8CC67B42D4123CF95B9A242C49472C6.d.9CEC3E728039C30CE6FE2236EB48C6D5.e.57")>
+DEBUG: Click en botón de login realizado
+DEBUG: URL actual después del login: https://app.lohas.eco/app_control_2fa/
+DEBUG: Esperando redirección al 2FA...
+DEBUG: URL actual antes de esperar 2FA: https://app.lohas.eco/app_control_2fa/
+DEBUG: ✅ Redirección a 2FA confirmada
+DEBUG: URL actual después de esperar 2FA: https://app.lohas.eco/app_control_2fa/
+DEBUG: Iniciando búsqueda de campo OTP...
+DEBUG: Iniciando búsqueda de OTP con timeout=10
+DEBUG: OTP_FIELD_ID = 'id_sc_field_code'
+DEBUG: OTP_FIELD_NAME = 'code'
+DEBUG: URL actual: https://app.lohas.eco/app_control_2fa/
+DEBUG: 1) Buscando OTP por ID: 'id_sc_field_code'
+DEBUG: Elemento encontrado por ID: <selenium.webdriver.remote.webelement.WebElement (session="96326558996090186acf7cfad50e2ede", element="f.D8CC67B42D4123CF95B9A242C49472C6.d.6600222EBC111B7E51EF178600DD67B0.e.75")>
+DEBUG: Elemento visible: True
+DEBUG: Elemento habilitado: True
+DEBUG: ✅ OTP encontrado por ID y visible
+DEBUG: ✅ Campo OTP encontrado exitosamente
+DEBUG: Buscando todos los emails de lohas en la última hora...
+DEBUG: Credenciales Gmail disponibles: brianswitach@gmail.com
+DEBUG: Buscando emails desde: 02-Oct-2025
+DEBUG: Encontrados 119 emails de sistema@lohas.eco en la última hora
+DEBUG: Email 1 (UID 37970):
+DEBUG:   Asunto: Código de acceso
+DEBUG:   Cuerpo (primeros 200 chars):  Su código de inicio de sesión es  437767  , ingréselo en su sistema.   Si no ha podido generar el código, informe al administrador del sistema. 
+...
+DEBUG:   ✅ OTP encontrado: 437767
+DEBUG: Email 2 (UID 37971):
+DEBUG:   Asunto: Código de acceso
+DEBUG:   Cuerpo (primeros 200 chars):  Su código de inicio de sesión es  319522  , ingréselo en su sistema.   Si no ha podido generar el código, informe al administrador del sistema. 
+...
+DEBUG:   ✅ OTP encontrado: 319522
+DEBUG: Email 3 (UID 37972):
+DEBUG:   Asunto: Código de acceso
+DEBUG:   Cuerpo (primeros 200 chars):  Su código de inicio de sesión es  194439  , ingréselo en su sistema.   Si no ha podido generar el código, informe al administrador del sistema. 
+...
+DEBUG:   ✅ OTP encontrado: 194439
+DEBUG: Email 4 (UID 37973):
+DEBUG:   Asunto: Código de acceso
+DEBUG:   Cuerpo (primeros 200 chars):  Su código de inicio de sesión es  887842  , ingréselo en su sistema.   Si no ha podido generar el código, informe al administrador del sistema. 
+...
+DEBUG:   ✅ OTP encontrado: 887842
+DEBUG: Email 5 (UID 37975):
+DEBUG:   Asunto: Código de acceso
+DEBUG:   Cuerpo (primeros 200 chars):  Su código de inicio de sesión es  958409  , ingréselo en su sistema.   Si no ha podido generar el código, informe al administrador del sistema. 
+...
+DEBUG:   ✅ OTP encontrado: 958409
+DEBUG: Buscando emails recientes de lohas (sin filtro de fecha)...
+DEBUG: Total de emails de sistema@lohas.eco encontrados: 162
+DEBUG: Email reciente 1 (UID 37972):
+DEBUG:   Asunto: Código de acceso
+DEBUG:   Cuerpo (primeros 200 chars):  Su código de inicio de sesión es  194439  , ingréselo en su sistema.   Si no ha podido generar el código, informe al administrador del sistema. 
+...
+DEBUG:   ✅ OTP encontrado: 194439
+DEBUG: Email reciente 2 (UID 37973):
+DEBUG:   Asunto: Código de acceso
+DEBUG:   Cuerpo (primeros 200 chars):  Su código de inicio de sesión es  887842  , ingréselo en su sistema.   Si no ha podido generar el código, informe al administrador del sistema. 
+...
+DEBUG:   ✅ OTP encontrado: 887842
+DEBUG: Email reciente 3 (UID 37975):
+DEBUG:   Asunto: Código de acceso
+DEBUG:   Cuerpo (primeros 200 chars):  Su código de inicio de sesión es  958409  , ingréselo en su sistema.   Si no ha podido generar el código, informe al administrador del sistema. 
+...
+DEBUG:   ✅ OTP encontrado: 958409
+DEBUG: Preparando búsqueda de OTP con baseline UID...
+DEBUG: Baseline UID establecido: 37975
+DEBUG: Usando el último OTP encontrado...
+DEBUG: Último UID encontrado: 37975
+DEBUG: Último email (UID 37975):
+DEBUG:   Asunto: Código de acceso
+DEBUG:   Cuerpo (primeros 200 chars):  Su código de inicio de sesión es  958409  , ingréselo en su sistema.   Si no ha podido generar el código, informe al administrador del sistema. 
+...
+DEBUG: ✅ Código OTP obtenido del último email: 958409
+DEBUG: Iniciando proceso de pegar OTP...
+DEBUG: Limpiando campo OTP...
+DEBUG: ✅ Campo OTP limpiado
+DEBUG: Pegando código OTP: 958409
+DEBUG: ✅ Código OTP pegado con JavaScript (sin formato)
+DEBUG: Valor actual del campo: '9-5-8-4-0-9'
+DEBUG: ✅ Verificación: código pegado correctamente (con formato automático)
+DEBUG: Buscando botón validar/confirmar...
+DEBUG: Probando selector 1: XPATH = '//input[@type='button' and (contains(@value,'Validar') or contains(@value,'Confirmar') or contains(@value,'Verificar') or contains(@value,'Enviar'))]'
+DEBUG: ❌ Selector 1 falló: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+DEBUG: Probando selector 2: XPATH = '//button[contains(., 'Validar') or contains(., 'Confirmar') or contains(., 'Verificar') or contains(., 'Enviar')]'
+DEBUG: ❌ Selector 2 falló: HTTPConnectionPool(host='127.0.0.1', port=58376): Max retries exceeded with url: /session/96326558996090186acf7cfad50e2ede/element (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x1080e4bb0>: Failed to establish a new connection: [Errno 61] Connection refused'))
+DEBUG: Probando selector 3: CSS_SELECTOR = 'input.button[onclick*='nm_atualiza']'
+DEBUG: ❌ Selector 3 falló: HTTPConnectionPool(host='127.0.0.1', port=58376): Max retries exceeded with url: /session/96326558996090186acf7cfad50e2ede/element (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x1081070a0>: Failed to establish a new connection: [Errno 61] Connection refused'))
+DEBUG: ❌ No se encontró botón validar
+DEBUG: Buscando botón Aceptar...
+DEBUG: ❌ No se pudo hacer click en botón Aceptar
+DEBUG: Buscando botón Confirmar final...
+DEBUG: ❌ No se pudo hacer click en botón Confirmar
+DEBUG: ❌ Proceso OTP falló - no se pudo confirmar
+DEBUG: Retornando True - proceso OTP completado
+DEBUG: login_otp() retornó: True
+Completada la Transferencia #1

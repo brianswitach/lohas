@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/brianswitach/Documents/lohas/bot_csv.py", line 31, in <module>
+    from selenium import webdriver
+ModuleNotFoundError: No module named 'selenium'

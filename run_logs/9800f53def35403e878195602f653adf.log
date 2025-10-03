@@ -1,0 +1,37 @@
+Arranca la Transferencia #1
+DEBUG: Iniciando navegación del navegador
+DEBUG: Página cargada, buscando campos de login
+DEBUG: Buscando campo de usuario
+DEBUG: Usuario ingresado
+DEBUG: Excepción en bucle principal: local variable 'time' referenced before assignment
+Fallida la Transferencia #1
+Pasada finalizada — Pass 1 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+DEBUG: Iniciando navegación del navegador
+DEBUG: Página cargada, buscando campos de login
+DEBUG: Buscando campo de usuario
+DEBUG: Usuario ingresado
+DEBUG: Excepción en bucle de reintentos: local variable 'time' referenced before assignment
+Fallida la Transferencia #1
+Pasada finalizada — Pass 2 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+DEBUG: Iniciando navegación del navegador
+DEBUG: Página cargada, buscando campos de login
+DEBUG: Buscando campo de usuario
+DEBUG: Usuario ingresado
+DEBUG: Excepción en bucle de reintentos: local variable 'time' referenced before assignment
+Fallida la Transferencia #1
+Pasada finalizada — Pass 3 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+DEBUG: Iniciando navegación del navegador
+DEBUG: Página cargada, buscando campos de login
+DEBUG: Buscando campo de usuario
+DEBUG: Usuario ingresado
+Fallida la Transferencia #1
+Pasada finalizada — Pass 4 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+DEBUG: Iniciando navegación del navegador
+DEBUG: Página cargada, buscando campos de login
+DEBUG: Buscando campo de usuario
+DEBUG: Usuario ingresado
+Fallida la Transferencia #1

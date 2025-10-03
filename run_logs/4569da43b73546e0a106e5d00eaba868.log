@@ -1,0 +1,44 @@
+/Users/brianswitach/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 1 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 2 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 3 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 4 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 5 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 6 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 7 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 8 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 9 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 10 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 11 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 12 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Fallida la Transferencia #1
+Pasada finalizada — Pass 13 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+Completada la Transferencia #1
+Pasada finalizada — Pass 14 — Completadas: 1 — Fallidas: none

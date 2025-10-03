@@ -1,0 +1,9 @@
+=== INICIANDO FUNCIÓN main ===
+SCAN_ONLY = 1
+DATE_FROM = None
+DATE_TO = None
+HEADLESS = None
+ACCOUNT_SEL = None
+PYTHONUNBUFFERED = 1
+DEBUG: Modo SCAN_ONLY activado
+{"accounts": []}
