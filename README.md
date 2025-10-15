@@ -5,13 +5,35 @@ Sistema de automatización para transferencias bancarias y exportación de datos
 ## 📋 Requisitos
 
 - Python 3.9 o superior
-- Google Chrome instalado
+- Google Chrome
 - Visual Studio Code (recomendado)
 - Git
+- GitHub Desktop (opcional)
 
 ## 🚀 Instalación Rápida
 
-### Opción 1: Script Automático (Recomendado)
+### Opción 1: Instalación Completa Desde Cero (macOS)
+
+Si **NO TIENES NADA INSTALADO** (primera vez):
+
+```bash
+# 1. Descargar el repositorio como ZIP desde GitHub
+#    https://github.com/brianswitach/lohas
+#    Descomprime el ZIP
+
+# 2. Abrir Terminal y navegar a la carpeta
+cd ~/Downloads/lohas-main  # (ajusta la ruta según dónde lo descargaste)
+
+# 3. Instalar TODO (Python, Git, VS Code, GitHub Desktop, Chrome)
+chmod +x setup_dependencies.sh
+./setup_dependencies.sh
+
+# 4. Configurar el proyecto
+chmod +x setup.sh
+./setup.sh
+```
+
+### Opción 2: Ya Tengo Python/Git Instalado
 
 ```bash
 # Clonar el repositorio
@@ -23,7 +45,7 @@ chmod +x setup.sh
 ./setup.sh
 ```
 
-### Opción 2: Instalación Manual
+### Opción 3: Instalación Manual
 
 ```bash
 # Clonar el repositorio
