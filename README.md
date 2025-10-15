@@ -12,7 +12,9 @@ Sistema de automatización para transferencias bancarias y exportación de datos
 
 ## 🚀 Instalación Rápida
 
-### Opción 1: Instalación Completa Desde Cero (macOS)
+### 🍎 macOS
+
+#### Opción 1: Instalación Completa Desde Cero
 
 Si **NO TIENES NADA INSTALADO** (primera vez):
 
@@ -33,7 +35,7 @@ chmod +x setup.sh
 ./setup.sh
 ```
 
-### Opción 2: Ya Tengo Python/Git Instalado
+#### Opción 2: Ya Tengo Python/Git Instalado
 
 ```bash
 # Clonar el repositorio
@@ -43,6 +45,49 @@ cd lohas
 # Ejecutar script de instalación
 chmod +x setup.sh
 ./setup.sh
+```
+
+---
+
+### 🪟 Windows
+
+#### Opción 1: Instalación Completa Desde Cero
+
+Si **NO TIENES NADA INSTALADO** (primera vez):
+
+```powershell
+# 1. Descargar el repositorio como ZIP desde GitHub
+#    https://github.com/brianswitach/lohas
+#    Descomprime el ZIP
+
+# 2. Abrir PowerShell COMO ADMINISTRADOR
+#    (Clic derecho en PowerShell → "Ejecutar como administrador")
+
+# 3. Navegar a la carpeta del proyecto
+cd C:\Users\TuUsuario\Downloads\lohas-main  # (ajusta la ruta)
+
+# 4. Permitir ejecución de scripts
+Set-ExecutionPolicy Bypass -Scope Process -Force
+
+# 5. Instalar TODO (Python, Git, VS Code, GitHub Desktop, Chrome)
+.\setup_dependencies_windows.ps1
+
+# 6. Cerrar y abrir una nueva PowerShell NORMAL (no como admin)
+
+# 7. Configurar el proyecto
+cd C:\Users\TuUsuario\Downloads\lohas-main
+.\setup_windows.bat
+```
+
+#### Opción 2: Ya Tengo Python/Git Instalado
+
+```powershell
+# Clonar el repositorio
+git clone https://github.com/brianswitach/lohas.git
+cd lohas
+
+# Ejecutar script de instalación
+.\setup_windows.bat
 ```
 
 ### Opción 3: Instalación Manual
@@ -71,12 +116,24 @@ mkdir -p run_logs transfer_logs descargas
 
 ### Iniciar el Servidor
 
+#### 🍎 macOS / Linux
+
 ```bash
 # Activar entorno virtual (si no está activado)
 source .venv/bin/activate
 
 # Iniciar servidor Flask
 PORT=5001 python3 flask_server.py
+```
+
+#### 🪟 Windows
+
+```powershell
+# Activar entorno virtual (si no está activado)
+.venv\Scripts\activate
+
+# Iniciar servidor Flask
+set PORT=5001 && python flask_server.py
 ```
 
 ### Acceder a la Interfaz Web
