@@ -1,0 +1,31 @@
+/Users/brianswitach/Documents/lohas/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+Arranca la Transferencia #1
+DEBUG: ChromeDriverManager falló: __init__() got an unexpected keyword argument 'executable_path'
+DEBUG: Excepción en bucle principal: __init__() got an unexpected keyword argument 'executable_path'
+Fallida la Transferencia #1
+Pasada finalizada — Pass 1 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+DEBUG: ChromeDriverManager falló: __init__() got an unexpected keyword argument 'executable_path'
+DEBUG: Excepción en bucle de reintentos: __init__() got an unexpected keyword argument 'executable_path'
+Fallida la Transferencia #1
+Pasada finalizada — Pass 2 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+DEBUG: ChromeDriverManager falló: __init__() got an unexpected keyword argument 'executable_path'
+DEBUG: Excepción en bucle de reintentos: __init__() got an unexpected keyword argument 'executable_path'
+Fallida la Transferencia #1
+Pasada finalizada — Pass 3 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+DEBUG: ChromeDriverManager falló: __init__() got an unexpected keyword argument 'executable_path'
+DEBUG: Excepción en bucle de reintentos: __init__() got an unexpected keyword argument 'executable_path'
+Fallida la Transferencia #1
+Pasada finalizada — Pass 4 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+DEBUG: ChromeDriverManager falló: __init__() got an unexpected keyword argument 'executable_path'
+DEBUG: Excepción en bucle de reintentos: __init__() got an unexpected keyword argument 'executable_path'
+Fallida la Transferencia #1
+Pasada finalizada — Pass 5 — Completadas: none — Fallidas: 1
+Arranca la Transferencia #1
+DEBUG: ChromeDriverManager falló: __init__() got an unexpected keyword argument 'executable_path'
+DEBUG: Excepción en bucle de reintentos: __init__() got an unexpected keyword argument 'executable_path'
+Fallida la Transferencia #1

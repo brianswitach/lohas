@@ -1,0 +1,8 @@
+/Users/brianswitach/Documents/lohas/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+Arranca la Transferencia #1
+DEBUG: Iniciando navegación del navegador
+DEBUG: Página cargada, buscando campos de login
+DEBUG: Buscando campo de usuario
+DEBUG: Usuario ingresado
+Fallida la Transferencia #1

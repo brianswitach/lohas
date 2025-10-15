@@ -1,0 +1,50 @@
+/Users/brianswitach/Documents/lohas/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+Abriendo diálogo para seleccionar CSV...
+CSV seleccionado: /Users/brianswitach/Downloads/145 RE 20250908 - bot.csv
+Se encontraron 318 transferencias en el CSV
+📄 Archivo de log creado: /Users/brianswitach/Documents/lohas/transfer_logs/transferencias_20251015_141012.txt
+Arranca la Transferencia #1
+DEBUG: Iniciando navegación del navegador
+DEBUG: Página cargada, buscando campos de login
+DEBUG: Buscando campo de usuario
+DEBUG: Usuario ingresado
+DEBUG: Buscando select de cuentas origen...
+DEBUG: Encontradas 2 cuentas origen
+DEBUG: Monto a transferir: 20000.0
+DEBUG: Verificando cuenta 1: BPMUP SRL871 (0000155300000000000871) PONDRA.CUARTO.BALDE
+DEBUG: Saldo leído (raw): '24.500,00'
+DEBUG: Saldo: 24500.0, Monto: 20000.0
+DEBUG: ✅ Cuenta con saldo suficiente encontrada: BPMUP SRL871 (0000155300000000000871) PONDRA.CUARTO.BALDE
+DEBUG: Cuenta origen seleccionada: BPMUP SRL871 (0000155300000000000871) PONDRA.CUARTO.BALDE
+DEBUG: CBU origen extraído: 0000155300000000000871
+DEBUG: Buscando campo cuenta destino...
+DEBUG: CBU destino pegado: 0000003100163899509815
+Fallida la Transferencia #1
+Arranca la Transferencia #2
+DEBUG: Iniciando navegación del navegador
+DEBUG: Página cargada, buscando campos de login
+DEBUG: Buscando campo de usuario
+DEBUG: Excepción en bucle principal: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=141.0.7390.77)
+Stacktrace:
+0   chromedriver                        0x00000001028575f0 cxxbridge1$str$ptr + 2894960
+1   chromedriver                        0x000000010284f52c cxxbridge1$str$ptr + 2861996
+2   chromedriver                        0x00000001023755ec _RNvCs47EqcsrPRmA_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 74324
+3   chromedriver                        0x000000010234f198 chromedriver + 143768
+4   chromedriver                        0x00000001023e53fc _RNvCs47EqcsrPRmA_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 532580
+5   chromedriver                        0x00000001023fdfb8 _RNvCs47EqcsrPRmA_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 633888
+6   chromedriver                        0x00000001023b1178 _RNvCs47EqcsrPRmA_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 318944
+7   chromedriver                        0x000000010281b33c cxxbridge1$str$ptr + 2648508
+8   chromedriver                        0x000000010281e918 cxxbridge1$str$ptr + 2662296
+9   chromedriver                        0x00000001027fbdbc cxxbridge1$str$ptr + 2520124
+10  chromedriver                        0x000000010281f200 cxxbridge1$str$ptr + 2664576
+11  chromedriver                        0x00000001027ed52c cxxbridge1$str$ptr + 2460588
+12  chromedriver                        0x000000010283ebec cxxbridge1$str$ptr + 2794092
+13  chromedriver                        0x000000010283ed70 cxxbridge1$str$ptr + 2794480
+14  chromedriver                        0x000000010284f178 cxxbridge1$str$ptr + 2861048
+15  libsystem_pthread.dylib             0x00000001a03c4c08 _pthread_start + 136
+16  libsystem_pthread.dylib             0x00000001a03bfba8 thread_start + 8
+
+Fallida la Transferencia #2

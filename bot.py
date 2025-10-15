@@ -22,6 +22,7 @@ import email.header
 from email.utils import parsedate_to_datetime
 from typing import List, Optional, Tuple, Callable, Dict, Any
 from datetime import datetime
+import json
 
 
 
@@ -1102,6 +1103,55 @@ def click_confirm_button(driver: webdriver.Chrome, wait: WebDriverWait, timeout:
 
 
 # ---------------------------
+# HISTORIAL DE TRANSFERENCIAS
+# ---------------------------
+def create_transfer_log_file() -> str:
+    """
+    Crea un archivo de log de transferencias con timestamp.
+    Retorna la ruta del archivo creado.
+    """
+    # Crear carpeta de logs si no existe
+    log_dir = os.path.join(os.getcwd(), "transfer_logs")
+    os.makedirs(log_dir, exist_ok=True)
+    
+    # Generar nombre de archivo con timestamp
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_file = os.path.join(log_dir, f"transferencias_{timestamp}.txt")
+    
+    # Crear archivo con encabezado
+    try:
+        with open(log_file, 'w', encoding='utf-8') as f:
+            f.write("=" * 80 + "\n")
+            f.write(f"HISTORIAL DE TRANSFERENCIAS - {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}\n")
+            f.write("=" * 80 + "\n\n")
+        _orig_print(f"📄 Archivo de log creado: {log_file}")
+        return log_file
+    except Exception as e:
+        _orig_print(f"❌ Error creando archivo de log: {e}")
+        return ""
+
+
+def log_transfer(log_file: str, transfer_number: int, cbu_origen: str, cbu_destino: str, monto: str, status: str = "COMPLETADA"):
+    """
+    Agrega una transferencia al archivo de log.
+    """
+    if not log_file or not os.path.exists(log_file):
+        return
+    
+    try:
+        with open(log_file, 'a', encoding='utf-8') as f:
+            f.write(f"Transferencia #{transfer_number}: {status}\n")
+            f.write(f"  CBU de ORIGEN:  {cbu_origen}\n")
+            f.write(f"  CBU de DESTINO: {cbu_destino}\n")
+            f.write(f"  MONTO:          ${monto}\n")
+            f.write(f"  Fecha/Hora:     {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}\n")
+            f.write("-" * 80 + "\n\n")
+        _orig_print(f"📝 Transfer #{transfer_number} registrada en log")
+    except Exception as e:
+        _orig_print(f"❌ Error escribiendo en log: {e}")
+
+
+# ---------------------------
 # CSV HELPERS
 # ---------------------------
 def select_csv_file() -> Optional[str]:
@@ -1168,12 +1218,15 @@ def read_transfers_from_csv(csv_path: str) -> List[Dict[str, Any]]:
 # ---------------------------
 # Opción B (secuencia principal)
 # ---------------------------
-def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = "10000") -> bool:
+def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = "10000") -> Tuple[bool, str]:
     """
     Ejecuta una transferencia completa en una nueva instancia de navegador.
-    Devuelve True si la transferencia se consideró exitosa, False en caso contrario.
+    Devuelve (success: bool, cbu_origen: str).
+    - success: True si la transferencia se consideró exitosa, False en caso contrario.
+    - cbu_origen: CBU de la cuenta origen seleccionada (vacío si falla antes de seleccionar cuenta).
     IMPORTANTE: no pide inputs manuales. Si OTP o código de transferencia no llegan -> devuelve False.
     """
+    cbu_origen_selected = ""  # Variable para guardar el CBU origen seleccionado
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
     options.add_argument("--no-sandbox")
@@ -1251,7 +1304,7 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
                 login_btn = None
         if not login_btn:
             # no se encontró el botón -> considerar fallo de transferencia
-            return False
+            return (False, cbu_origen_selected)
         try:
             login_btn.click()
         except Exception:
@@ -1272,7 +1325,7 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
             otp_input = find_otp_input_and_debug(driver, wait, timeout=10)
         except Exception:
             # no se encontró campo OTP -> considerar transferencia fallida
-            return False
+            return (False, cbu_origen_selected)
 
         # Preparar baseline UID para IMAP
         since_uid = None
@@ -1295,10 +1348,10 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
                 otp_code, got_uid = get_latest_otp_gmail(user=GMAIL_USER, pwd=GMAIL_PASS, timeout_sec=120, poll_every=2.0, since_uid=since_uid)
             else:
                 # sin credenciales gmail -> no puede operar
-                return False
+                return (False, cbu_origen_selected)
         except Exception:
             # No se obtuvo OTP -> marcar falla
-            return False
+            return (False, cbu_origen_selected)
 
         # Pegar OTP
         try:
@@ -1309,7 +1362,7 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
             otp_input.send_keys(otp_code)
         except Exception:
             # no se pudo pegar OTP -> fallo
-            return False
+            return (False, cbu_origen_selected)
 
         # Buscar botón validar/confirmar y click (si existe)
         validate_btn = None
@@ -1356,8 +1409,131 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
             except Exception:
                 pass
 
-            # --- PARTE 1: buscar campo cuenta, pegar valor y presionar "Próximo" ---
+            # --- PARTE 1: Verificar saldo de cuentas origen y seleccionar una con saldo suficiente ---
             try:
+                # Buscar el select de cuentas origen
+                print("ERROR_DEBUG:Buscando select de cuentas origen...")
+                select_origen = locate_element_across_frames(driver, By.ID, "id_sc_field_idcuenta", timeout=15)
+                
+                if not select_origen:
+                    print("ERROR_DEBUG:No se encontró el select de cuentas origen")
+                    return (False, cbu_origen_selected)
+                
+                # Obtener todas las opciones del select
+                try:
+                    options = select_origen.find_elements(By.TAG_NAME, "option")
+                    print(f"ERROR_DEBUG:Encontradas {len(options)} cuentas origen")
+                except Exception as e:
+                    print(f"ERROR_DEBUG:Error obteniendo opciones del select: {e}")
+                    return (False, cbu_origen_selected)
+                
+                if not options:
+                    print("ERROR_DEBUG:No hay cuentas origen disponibles")
+                    return (False, cbu_origen_selected)
+                
+                # Convertir monto a float para comparación
+                # El CSV viene en formato inglés (punto decimal): 20000.00
+                try:
+                    monto_str = str(monto).strip()
+                    # Detectar si es formato argentino (con coma decimal) o inglés (con punto decimal)
+                    if ',' in monto_str and '.' in monto_str:
+                        # Formato argentino: 1.000,50 -> eliminar punto (miles) y reemplazar coma por punto
+                        monto_float = float(monto_str.replace('.', '').replace(',', '.'))
+                    elif ',' in monto_str:
+                        # Solo coma: formato argentino: 1000,50
+                        monto_float = float(monto_str.replace(',', '.'))
+                    else:
+                        # Solo punto o sin separadores: formato inglés: 1000.50 o 1000
+                        monto_float = float(monto_str)
+                except Exception as e:
+                    print(f"ERROR_DEBUG:Error convirtiendo monto '{monto}': {e}")
+                    monto_float = 0
+                
+                print(f"ERROR_DEBUG:Monto a transferir: {monto_float}")
+                
+                # Iterar sobre cada cuenta origen para verificar saldo
+                cuenta_seleccionada = None
+                for idx, option in enumerate(options):
+                    try:
+                        cuenta_text = option.text
+                        cuenta_value = option.get_attribute("value")
+                        print(f"ERROR_DEBUG:Verificando cuenta {idx+1}: {cuenta_text}")
+                        
+                        # Seleccionar esta opción
+                        try:
+                            driver.execute_script("arguments[0].selected = true; arguments[0].dispatchEvent(new Event('change', {bubbles: true}));", option)
+                            time.sleep(1)  # Esperar a que se actualice el saldo
+                        except Exception as e:
+                            print(f"ERROR_DEBUG:Error seleccionando opción: {e}")
+                            continue
+                        
+                        # Buscar el campo de saldo
+                        try:
+                            saldo_field = locate_element_across_frames(driver, By.ID, "id_sc_field_saldo", timeout=5)
+                            if not saldo_field:
+                                print(f"ERROR_DEBUG:No se encontró campo de saldo para cuenta {idx+1}")
+                                continue
+                            
+                            saldo_text = saldo_field.get_attribute("value") or ""
+                            print(f"ERROR_DEBUG:Saldo leído (raw): '{saldo_text}'")
+                            
+                            # Convertir saldo a float (formato: "24.500,00" -> 24500.00)
+                            try:
+                                saldo_float = float(saldo_text.replace('.', '').replace(',', '.'))
+                            except Exception as e:
+                                print(f"ERROR_DEBUG:Error convirtiendo saldo '{saldo_text}': {e}")
+                                continue
+                            
+                            print(f"ERROR_DEBUG:Saldo: {saldo_float}, Monto: {monto_float}")
+                            
+                            # Verificar si el saldo es suficiente
+                            if saldo_float >= monto_float:
+                                print(f"ERROR_DEBUG:✅ Cuenta con saldo suficiente encontrada: {cuenta_text}")
+                                cuenta_seleccionada = {
+                                    'option': option,
+                                    'text': cuenta_text,
+                                    'value': cuenta_value,
+                                    'saldo': saldo_float
+                                }
+                                break
+                            else:
+                                print(f"ERROR_DEBUG:❌ Saldo insuficiente ({saldo_float} < {monto_float})")
+                        except Exception as e:
+                            print(f"ERROR_DEBUG:Error verificando saldo: {e}")
+                            continue
+                    except Exception as e:
+                        print(f"ERROR_DEBUG:Error procesando cuenta {idx+1}: {e}")
+                        continue
+                
+                # Verificar si se encontró una cuenta con saldo suficiente
+                if not cuenta_seleccionada:
+                    print("ERROR_DEBUG:❌ Ninguna cuenta tiene saldo suficiente para esta transferencia")
+                    _orig_print("\n" + "="*80)
+                    _orig_print("❌ TRANSFERENCIA FALLIDA: Ninguna de las cuentas tiene saldo suficiente")
+                    _orig_print(f"   Monto requerido: ${monto_float:,.2f}")
+                    _orig_print("="*80 + "\n")
+                    return (False, cbu_origen_selected)
+                
+                # Seleccionar la cuenta encontrada (por si no quedó seleccionada)
+                try:
+                    driver.execute_script("arguments[0].selected = true; arguments[0].dispatchEvent(new Event('change', {bubbles: true}));", cuenta_seleccionada['option'])
+                    time.sleep(0.5)
+                    print(f"ERROR_DEBUG:Cuenta origen seleccionada: {cuenta_seleccionada['text']}")
+                    
+                    # Extraer CBU origen del texto (formato: "BPMUP SRL871 (0000155300000000000871) PONDRA.CUARTO.BALDE")
+                    try:
+                        import re as re_module
+                        cbu_match = re_module.search(r'\((\d{22})\)', cuenta_seleccionada['text'])
+                        if cbu_match:
+                            cbu_origen_selected = cbu_match.group(1)
+                            print(f"ERROR_DEBUG:CBU origen extraído: {cbu_origen_selected}")
+                    except Exception as e:
+                        print(f"ERROR_DEBUG:Error extrayendo CBU origen: {e}")
+                except Exception as e:
+                    print(f"ERROR_DEBUG:Error en selección final: {e}")
+                
+                # Ahora sí, pegar la cuenta destino
+                print("ERROR_DEBUG:Buscando campo cuenta destino...")
                 cuenta_el = locate_element_across_frames(driver, By.ID, CUENTA_FIELD_ID, timeout=15)
                 if cuenta_el:
                     try:
@@ -1369,9 +1545,11 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
                             pass
                     try:
                         cuenta_el.send_keys(cbu_destino)
+                        print(f"ERROR_DEBUG:CBU destino pegado: {cbu_destino}")
                     except Exception:
                         try:
                             driver.execute_script("arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('change'));", cuenta_el, cbu_destino)
+                            print(f"ERROR_DEBUG:CBU destino pegado (JS): {cbu_destino}")
                         except Exception:
                             pass
                 # primer Próximo
@@ -1396,10 +1574,10 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
                     time.sleep(3)
             except Exception:
                 # si algo falla aquí, consideramos transferencia fallida
-                return False
+                return (False, cbu_origen_selected)
         else:
             # if confirm not clicked, no podemos avanzar -> fallo
-            return False
+            return (False, cbu_origen_selected)
 
         # --- AHORA: volver al mail para leer el código de confirmación de la transferencia ---
         transfer_code = ""
@@ -1414,11 +1592,11 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
                     transfer_code, t_uid = get_latest_transfer_code_gmail(user=GMAIL_USER, pwd=GMAIL_PASS, subject_search="Envío de código", timeout_sec=35, poll_every=3.0)
                 except Exception:
                     # no llegó el código -> marcar falla
-                    return False
+                    return (False, cbu_origen_selected)
             else:
-                return False
+                return (False, cbu_origen_selected)
         except Exception:
-            return False
+            return (False, cbu_origen_selected)
 
         # Pegar código en input token_cliente
         try:
@@ -1448,11 +1626,11 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
                     
                     time.sleep(3)
                 except Exception:
-                    return False
+                    return (False, cbu_origen_selected)
             else:
-                return False
+                return (False, cbu_origen_selected)
         except Exception:
-            return False
+            return (False, cbu_origen_selected)
 
         # Presionar Confirmar final
         try:
@@ -1476,7 +1654,7 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
         except Exception:
             pass
 
-        return success
+        return (success, cbu_origen_selected)
     finally:
         try:
             driver.quit()
@@ -1508,13 +1686,17 @@ def main():
     
     _orig_print(f"Se encontraron {len(transfers)} transferencias en el CSV")
     
+    # Crear archivo de log de transferencias
+    log_file = create_transfer_log_file()
+    
     # Estructura para tracking: diccionario {índice: {'transfer': datos, 'status': 'pending'|'done'|'failed'}}
     transfer_status: Dict[int, Dict[str, Any]] = {}
     for idx, transfer in enumerate(transfers, start=1):
         transfer_status[idx] = {
             'transfer': transfer,
             'status': 'pending',
-            'cbu': transfer.get('CBU_DESTINO', ''),
+            'cbu_destino': transfer.get('CBU_DESTINO', ''),
+            'cbu_origen': transfer.get('CBU_ORIGEN', ''),  # Del CSV si está disponible
             'monto': transfer.get('MONTO', '')
         }
     
@@ -1524,15 +1706,18 @@ def main():
     # Primera pasada
     for idx in range(1, len(transfers) + 1):
         t_data = transfer_status[idx]
-        cbu = t_data['cbu']
+        cbu_destino = t_data['cbu_destino']
         monto = t_data['monto']
         
         print(f"TRANSFE_START:{idx}")
         try:
-            ok = opcion_b_selenium(cbu_destino=cbu, monto=monto)
+            ok, cbu_origen = opcion_b_selenium(cbu_destino=cbu_destino, monto=monto)
             if ok:
                 print(f"TRANSFE_DONE:{idx}")
                 transfer_status[idx]['status'] = 'done'
+                transfer_status[idx]['cbu_origen_real'] = cbu_origen  # Guardar CBU origen real
+                # Registrar en log
+                log_transfer(log_file, idx, cbu_origen, cbu_destino, monto, "COMPLETADA")
             else:
                 print(f"TRANSFE_FAILED:{idx}")
                 transfer_status[idx]['status'] = 'failed'
@@ -1567,15 +1752,18 @@ def main():
 
         for idx in current_failed:
             t_data = transfer_status[idx]
-            cbu = t_data['cbu']
+            cbu_destino = t_data['cbu_destino']
             monto = t_data['monto']
             
             print(f"TRANSFE_START:{idx}")
             try:
-                ok = opcion_b_selenium(cbu_destino=cbu, monto=monto)
+                ok, cbu_origen = opcion_b_selenium(cbu_destino=cbu_destino, monto=monto)
                 if ok:
                     print(f"TRANSFE_DONE:{idx}")
                     transfer_status[idx]['status'] = 'done'
+                    transfer_status[idx]['cbu_origen_real'] = cbu_origen
+                    # Registrar en log
+                    log_transfer(log_file, idx, cbu_origen, cbu_destino, monto, "COMPLETADA")
                     succeeded_this_pass.append(idx)
                 else:
                     print(f"TRANSFE_FAILED:{idx}")

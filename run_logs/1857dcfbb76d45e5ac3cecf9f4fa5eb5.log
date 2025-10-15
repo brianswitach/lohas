@@ -1,0 +1,95 @@
+/Users/brianswitach/Documents/lohas/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+Abriendo diálogo para seleccionar CSV...
+CSV seleccionado: /Users/brianswitach/Downloads/145 RE 20250908 - bot.csv
+Se encontraron 318 transferencias en el CSV
+Arranca la Transferencia #1
+DEBUG: Iniciando navegación del navegador
+DEBUG: Página cargada, buscando campos de login
+DEBUG: Buscando campo de usuario
+DEBUG: Usuario ingresado
+DEBUG: Buscando select de cuentas origen...
+DEBUG: Encontradas 2 cuentas origen
+DEBUG: Monto a transferir: 2000000.0
+DEBUG: Verificando cuenta 1: BPMUP SRL871 (0000155300000000000871) PONDRA.CUARTO.BALDE
+DEBUG: Saldo leído (raw): '24.500,00'
+DEBUG: Saldo: 24500.0, Monto: 2000000.0
+DEBUG: ❌ Saldo insuficiente (24500.0 < 2000000.0)
+DEBUG: Verificando cuenta 2: BPMUP SRL888 (0000155300000000000888) MAR.TEXTO.DESTILAN
+DEBUG: Saldo leído (raw): '25.000,00'
+DEBUG: Saldo: 25000.0, Monto: 2000000.0
+DEBUG: ❌ Saldo insuficiente (25000.0 < 2000000.0)
+DEBUG: ❌ Ninguna cuenta tiene saldo suficiente para esta transferencia
+
+================================================================================
+❌ TRANSFERENCIA FALLIDA: Ninguna de las cuentas tiene saldo suficiente
+   Monto requerido: $2,000,000.00
+================================================================================
+
+Fallida la Transferencia #1
+Arranca la Transferencia #2
+DEBUG: Iniciando navegación del navegador
+DEBUG: Página cargada, buscando campos de login
+DEBUG: Buscando campo de usuario
+DEBUG: Excepción en bucle principal: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+Fallida la Transferencia #2
+Arranca la Transferencia #3
+DEBUG: Iniciando navegación del navegador
+DEBUG: Página cargada, buscando campos de login
+DEBUG: Buscando campo de usuario
+DEBUG: Excepción en bucle principal: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=141.0.7390.77)
+Stacktrace:
+0   chromedriver                        0x00000001049eb5f0 cxxbridge1$str$ptr + 2894960
+1   chromedriver                        0x00000001049e352c cxxbridge1$str$ptr + 2861996
+2   chromedriver                        0x00000001045095ec _RNvCs47EqcsrPRmA_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 74324
+3   chromedriver                        0x00000001044e3198 chromedriver + 143768
+4   chromedriver                        0x00000001045793fc _RNvCs47EqcsrPRmA_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 532580
+5   chromedriver                        0x0000000104591fb8 _RNvCs47EqcsrPRmA_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 633888
+6   chromedriver                        0x0000000104545178 _RNvCs47EqcsrPRmA_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 318944
+7   chromedriver                        0x00000001049af33c cxxbridge1$str$ptr + 2648508
+8   chromedriver                        0x00000001049b2918 cxxbridge1$str$ptr + 2662296
+9   chromedriver                        0x000000010498fdbc cxxbridge1$str$ptr + 2520124
+10  chromedriver                        0x00000001049b3200 cxxbridge1$str$ptr + 2664576
+11  chromedriver                        0x000000010498152c cxxbridge1$str$ptr + 2460588
+12  chromedriver                        0x00000001049d2bec cxxbridge1$str$ptr + 2794092
+13  chromedriver                        0x00000001049d2d70 cxxbridge1$str$ptr + 2794480
+14  chromedriver                        0x00000001049e3178 cxxbridge1$str$ptr + 2861048
+15  libsystem_pthread.dylib             0x00000001a03c4c08 _pthread_start + 136
+16  libsystem_pthread.dylib             0x00000001a03bfba8 thread_start + 8
+
+Fallida la Transferencia #3
+Arranca la Transferencia #4
+DEBUG: Iniciando navegación del navegador
+DEBUG: Página cargada, buscando campos de login
+DEBUG: Buscando campo de usuario
+DEBUG: Excepción en bucle principal: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=141.0.7390.77)
+Stacktrace:
+0   chromedriver                        0x0000000102e5f5f0 cxxbridge1$str$ptr + 2894960
+1   chromedriver                        0x0000000102e5752c cxxbridge1$str$ptr + 2861996
+2   chromedriver                        0x000000010297d5ec _RNvCs47EqcsrPRmA_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 74324
+3   chromedriver                        0x0000000102957198 chromedriver + 143768
+4   chromedriver                        0x00000001029ed3fc _RNvCs47EqcsrPRmA_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 532580
+5   chromedriver                        0x0000000102a05fb8 _RNvCs47EqcsrPRmA_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 633888
+6   chromedriver                        0x00000001029b9178 _RNvCs47EqcsrPRmA_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 318944
+7   chromedriver                        0x0000000102e2333c cxxbridge1$str$ptr + 2648508
+8   chromedriver                        0x0000000102e26918 cxxbridge1$str$ptr + 2662296
+9   chromedriver                        0x0000000102e03dbc cxxbridge1$str$ptr + 2520124
+10  chromedriver                        0x0000000102e27200 cxxbridge1$str$ptr + 2664576
+11  chromedriver                        0x0000000102df552c cxxbridge1$str$ptr + 2460588
+12  chromedriver                        0x0000000102e46bec cxxbridge1$str$ptr + 2794092
+13  chromedriver                        0x0000000102e46d70 cxxbridge1$str$ptr + 2794480
+14  chromedriver                        0x0000000102e57178 cxxbridge1$str$ptr + 2861048
+15  libsystem_pthread.dylib             0x00000001a03c4c08 _pthread_start + 136
+16  libsystem_pthread.dylib             0x00000001a03bfba8 thread_start + 8
+
+Fallida la Transferencia #4
+Arranca la Transferencia #5
+DEBUG: Iniciando navegación del navegador
+DEBUG: Página cargada, buscando campos de login
+DEBUG: Buscando campo de usuario
+DEBUG: Usuario ingresado
+Fallida la Transferencia #5

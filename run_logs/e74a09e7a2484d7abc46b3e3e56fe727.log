@@ -1,0 +1,27 @@
+/Users/brianswitach/Documents/lohas/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+DEBUG: ===== INICIANDO FUNCIÓN main =====
+DEBUG: SCAN_ONLY = None
+DEBUG: DATE_FROM = None
+DEBUG: DATE_TO = None
+DEBUG: HEADLESS = None
+DEBUG: ACCOUNT_SEL = None
+DEBUG: PYTHONUNBUFFERED = 1
+DEBUG: Modo normal - iniciando transferencia
+Arranca la Transferencia #1
+DEBUG: Llamando a login_otp()...
+DEBUG: ===== INICIANDO PROCESO DE LOGIN OTP =====
+DEBUG: No se configuraron fechas - solo proceso OTP
+DEBUG: Iniciando proceso de login...
+DEBUG: Navegando a URL: https://app.lohas.eco/app_Login
+DEBUG: URL actual después de navegar: https://app.lohas.eco/app_Login
+DEBUG: Buscando campo de usuario: id_sc_field_login
+DEBUG: Campo de usuario encontrado: <selenium.webdriver.remote.webelement.WebElement (session="79ea5124eb790609eda33530786014b1", element="f.C7CF584DDC7B4C52AC0EEECBEEB77CE0.d.4305BA6893A097026E2BCB5947F116CE.e.15")>
+DEBUG: Usuario ingresado: briansw
+DEBUG: Buscando campo de contraseña: id_sc_field_pswd
+DEBUG: Campo de contraseña encontrado: <selenium.webdriver.remote.webelement.WebElement (session="79ea5124eb790609eda33530786014b1", element="f.C7CF584DDC7B4C52AC0EEECBEEB77CE0.d.4305BA6893A097026E2BCB5947F116CE.e.16")>
+DEBUG: Contraseña ingresada
+DEBUG: Buscando botón de login...
+DEBUG: Botón de login encontrado: None
+DEBUG: login_otp() retornó: False
+Fallida la Transferencia #1

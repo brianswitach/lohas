@@ -3,4 +3,4 @@ __pycache__/
 *.pyc
 .env
 venv/
-run.log
+run.logtransfer_logs/
