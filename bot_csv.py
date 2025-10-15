@@ -25,8 +25,9 @@ Flujo normal (incluye todas las pausas solicitadas)
 from __future__ import annotations
 
 import builtins
-import email, imaplib, os, re, sys, time, json
+import email, imaplib, os, re, sys, time, json, pathlib, smtplib, ssl
 from typing import Callable, Optional, Tuple
+from email.message import EmailMessage
 
 from selenium import webdriver
 from selenium.webdriver import Chrome
@@ -34,17 +35,22 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import (
+    TimeoutException,
+    NoSuchElementException,
+    StaleElementReferenceException,
+    ElementClickInterceptedException,
+    ElementNotInteractableException,
+)
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.keys import Keys
 
-from bot import get_latest_otp_gmail
+from bot import get_latest_otp_gmail  # si no existe, comentar o implementar
 
 # ───────────────────────── PRINT MÍNIMO ──────────────────────────────────────
-import sys
-
 _orig_print = builtins.print
 def _minimal_print(*a, **kw):
-    if a and str(a[0]).startswith(("TRANSFE_START:", "TRANSFE_DONE:", "TRANSFE_FAILED:", "DEBUG:")):
+    if a and str(a[0]).startswith(("TRANSFE_START:", "TRANSFE_DONE:", "TRANSFE_FAILED:", "DEBUG:", "ACCOUNTS_JSON:")):
         # Para logs DEBUG, usar sys.stdout.write con flush forzado
         if str(a[0]).startswith("DEBUG:"):
             message = ' '.join(str(x) for x in a)
@@ -80,11 +86,14 @@ ANO_HASTA  = "SC_fecha_hora_input_2_ano"
 # HEADLESS configurable por entorno  (default: sí es headless)
 HEADLESS = os.getenv("HEADLESS", "0").lower() not in ("0", "false", "no")
 
-# ───────────────────────── CONSTANTES IMAP ───────────────────────────────────
+# ───────────────────────── CONSTANTES IMAP / SMTP ───────────────────────────
 GMAIL_IMAP_HOST  = "imap.gmail.com"
 GMAIL_USER       = "brianswitach@gmail.com"
 GMAIL_PASS       = "nlrsuamujfrictoh"
 KNOWN_SENDER     = "sistema@lohas.eco"
+
+# Directorio donde se guardarán las descargas (relativo al cwd)
+DOWNLOAD_DIR = os.path.abspath(os.getenv("DOWNLOAD_DIR", os.path.join(os.getcwd(), "descargas")))
 
 OTP_PHRASE_RE  = re.compile(r"su\s+c[oó]digo\s+de\s+inicio\s+de\s+sesi[oó]n\s+es\s*[:\s,-]*?(\d{4,8})", re.I)
 OTP_DIGITS_RE  = re.compile(r"\b(\d{4,8})\b")
@@ -95,7 +104,10 @@ ACCOUNTS_SELECTOR = os.getenv(
     "select#account, select[name='account'], select.accounts, select[id*='cuenta']"
 )
 
-# ──────────────────────────── IMAP HELPERS ───────────────────────────────────
+# Asegurar carpeta de descargas existe
+os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+
+# ──────────────────────────── IMAP HELPERS ─────────────────────────────────
 def imap_connect() -> imaplib.IMAP4_SSL:
     m = imaplib.IMAP4_SSL(GMAIL_IMAP_HOST)
     m.login(GMAIL_USER, GMAIL_PASS)
@@ -204,6 +216,200 @@ def safe_click(drv: Chrome, el):
     except:
         try: drv.execute_script("arguments[0].click()", el); return True
         except: return False
+
+def click_with_fallback(drv, wait, by, val, timeout=12, check_iframe=True, js_last_resort=True):
+    """
+    Intenta varios métodos para clicar en un elemento:
+      - espera presencia y visibilidad
+      - scrollIntoView
+      - click(), execute_script('click'), búsqueda dentro de iframes
+      - último recurso: ejecutar JS (processa(), downloadClick(), etc.) si js_last_resort True
+    Devuelve la tupla (ok: bool, message: str).
+    """
+    deadline = time.time() + timeout
+    last_exc = None
+
+    # 1) Intento directo en contenido principal con espera
+    try:
+        el = WebDriverWait(drv, min(6, timeout)).until(EC.presence_of_element_located((by, val)))
+        try:
+            try: drv.switch_to.default_content()
+            except: pass
+            if getattr(el, "is_displayed", lambda: False)():
+                try:
+                    drv.execute_script("arguments[0].scrollIntoView({block:'center'});", el)
+                except:
+                    pass
+                try:
+                    el.click()
+                    return True, "clicked_direct"
+                except Exception as e:
+                    last_exc = e
+                    try:
+                        drv.execute_script("arguments[0].click();", el)
+                        return True, "clicked_js_exec_on_element"
+                    except Exception as e2:
+                        last_exc = e2
+        except StaleElementReferenceException as e:
+            last_exc = e
+    except Exception as e:
+        last_exc = e
+
+    # 2) Intentar buscar por XPath alternativo (texto) si ID falló
+    try:
+        xpath_text = f"//a[normalize-space()='Aceptar' or contains(.,'Aceptar') or normalize-space()='Confirmar']"
+        els = drv.find_elements(By.XPATH, xpath_text)
+        for el in els:
+            try:
+                if getattr(el, "is_displayed", lambda: False)():
+                    try:
+                        el.click(); return True, "clicked_xpath_text"
+                    except Exception:
+                        try:
+                            drv.execute_script("arguments[0].click();", el); return True, "clicked_js_on_xpath"
+                        except Exception as e:
+                            last_exc = e
+            except Exception as e:
+                last_exc = e
+    except Exception as e:
+        last_exc = e
+
+    # 3) Buscar dentro de iframes (barrido)
+    if check_iframe:
+        try:
+            frames = drv.find_elements(By.TAG_NAME, "iframe")
+            for fr in frames:
+                try:
+                    drv.switch_to.frame(fr)
+                    try:
+                        inner = drv.find_element(by, val)
+                        if inner and getattr(inner, "is_displayed", lambda: False)():
+                            try:
+                                inner.click(); drv.switch_to.default_content(); return True, "clicked_in_iframe"
+                            except Exception:
+                                try:
+                                    drv.execute_script("arguments[0].click();", inner); drv.switch_to.default_content(); return True, "clicked_js_in_iframe"
+                                except Exception as e:
+                                    last_exc = e
+                    except Exception:
+                        # intentar XPath por texto dentro del iframe
+                        try:
+                            inner_alt = drv.find_elements(By.XPATH, "//a[normalize-space()='Aceptar' or contains(.,'Aceptar')]")
+                            for ia in inner_alt:
+                                try:
+                                    if getattr(ia, "is_displayed", lambda: False)():
+                                        try:
+                                            ia.click(); drv.switch_to.default_content(); return True, "clicked_xpath_iframe"
+                                        except Exception:
+                                            drv.execute_script("arguments[0].click();", ia); drv.switch_to.default_content(); return True, "clicked_js_xpath_iframe"
+                                except Exception:
+                                    continue
+                        except Exception:
+                            pass
+                    try: drv.switch_to.default_content()
+                    except: pass
+                except Exception:
+                    try: drv.switch_to.default_content()
+                    except: pass
+        except Exception as e:
+            last_exc = e
+
+    # 4) Último recurso: intentar ejecutar la función JS que procesa el confirm/download (si existe)
+    if js_last_resort:
+        try:
+            drv.execute_script("if(typeof processa === 'function'){ processa(); }")
+            return True, "executed_processa_js"
+        except Exception as e:
+            last_exc = e
+
+    return False, f"failed_all_methods - last_exc: {repr(last_exc)}"
+
+def configure_chrome_options_for_download(opts: webdriver.ChromeOptions, download_dir: str):
+    """
+    Añade preferencias para que Chrome descargue automáticamente en download_dir.
+    """
+    prefs = {
+        "download.default_directory": download_dir,
+        "download.prompt_for_download": False,
+        "download.directory_upgrade": True,
+        "safebrowsing.enabled": True,
+        "safebrowsing.disable_download_protection": True,
+    }
+    opts.add_experimental_option("prefs", prefs)
+
+def enable_download_behavior_with_cdp(drv, download_dir: str):
+    """
+    Enforce download behavior for headless Chrome via CDP (Page.setDownloadBehavior).
+    """
+    try:
+        # Este comando funciona con chromedriver moderno
+        drv.execute_cdp_cmd("Page.setDownloadBehavior", {"behavior": "allow", "downloadPath": download_dir})
+        return True
+    except Exception:
+        # no fatal
+        return False
+
+def find_latest_file(directory: str, pattern_exts=(".csv",), timeout=20):
+    """
+    Busca el archivo más reciente en directory con una de las extensiones en pattern_exts.
+    Espera hasta `timeout` segundos a que aparezca.
+    Devuelve ruta absoluta o None.
+    """
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        try:
+            files = []
+            for name in os.listdir(directory):
+                lower = name.lower()
+                if any(lower.endswith(ext) for ext in pattern_exts):
+                    full = os.path.join(directory, name)
+                    try:
+                        mtime = os.path.getmtime(full)
+                        files.append((mtime, full))
+                    except Exception:
+                        continue
+            if files:
+                files.sort(reverse=True)
+                return files[0][1]
+        except Exception:
+            pass
+        time.sleep(1)
+    return None
+
+def send_file_via_smtp(file_path: str, recipient: str, subject: str, body: str = "Adjunto CSV"):
+    """
+    Envia file_path a recipient usando SMTP de Gmail con GMAIL_USER/GMAIL_PASS.
+    """
+    if not os.path.isfile(file_path):
+        return False, f"file_not_found: {file_path}"
+
+    msg = EmailMessage()
+    msg["From"] = GMAIL_USER
+    msg["To"] = recipient
+    msg["Subject"] = subject
+    msg.set_content(body)
+
+    try:
+        with open(file_path, "rb") as f:
+            data = f.read()
+            maintype = "application"
+            subtype = "octet-stream"
+            # si es CSV podemos ajustar
+            if file_path.lower().endswith(".csv"):
+                maintype = "text"
+                subtype = "csv"
+            msg.add_attachment(data, maintype=maintype, subtype=subtype, filename=os.path.basename(file_path))
+    except Exception as e:
+        return False, f"read_err: {e}"
+
+    try:
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as s:
+            s.login(GMAIL_USER, GMAIL_PASS)
+            s.send_message(msg)
+        return True, "sent"
+    except Exception as e:
+        return False, f"smtp_err: {e}"
 
 def find_otp_input_and_debug(driver: webdriver.Chrome, wait: WebDriverWait, timeout: int = 10):
     print(f"DEBUG: Iniciando búsqueda de OTP con timeout={timeout}")
@@ -452,10 +658,22 @@ def scan_accounts(timeout=30):
         opts.add_argument("--headless=new")
     opts.add_argument("--no-sandbox")
     opts.add_argument("--disable-dev-shm-usage")
-    # Fix ChromeDriver timeout issues by using a stable version
-    drv = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=opts)
+
+    # Configurar prefs de descarga
+    configure_chrome_options_for_download(opts, DOWNLOAD_DIR)
+
+    # Crear driver con Service
+    service = ChromeService(ChromeDriverManager().install())
+    drv = webdriver.Chrome(service=service, options=opts)
     drv.set_page_load_timeout(60)
     drv.implicitly_wait(10)
+
+    # habilitar CDP para descargas (especialmente en modo headless)
+    try:
+        enable_download_behavior_with_cdp(drv, DOWNLOAD_DIR)
+    except Exception:
+        pass
+
     try:
         wait = WebDriverWait(drv, 30)
         drv.get(URL_B)
@@ -470,11 +688,6 @@ def scan_accounts(timeout=30):
             time.sleep(3)
         except Exception:
             pass  # posiblemente ya logueado
-
-        # COMENTADO TEMPORALMENTE - navegar a la grilla
-        # try: drv.get(TRANSFER_URL)
-        # except: pass
-        # time.sleep(5)
 
         sel, selectors = None, [s.strip() for s in ACCOUNTS_SELECTOR.split(",") if s.strip()]
         deadline = time.time() + timeout
@@ -501,7 +714,7 @@ def scan_accounts(timeout=30):
                                          "text":  o.text})
                 except: pass
 
-        print(json.dumps({"accounts": accounts}, ensure_ascii=False))
+        _orig_print(json.dumps({"accounts": accounts}, ensure_ascii=True))
         return 0
     finally:
         try: drv.quit()
@@ -516,20 +729,32 @@ def login_otp() -> bool:
     
     # Solo procesar fechas si están disponibles
     if date_from and date_to:
-        df_y, df_m, df_d = date_from.split("-")
-        dt_y, dt_m, dt_d = date_to.split("-")
-        print(f"DEBUG: Fechas configuradas: {date_from} a {date_to}")
+       df_y, df_m, df_d = date_from.split("-")
+       dt_y, dt_m, dt_d = date_to.split("-")
+       print(f"DEBUG: Fechas configuradas: {date_from} a {date_to}")
     else:
-        print("DEBUG: No se configuraron fechas - solo proceso OTP")
+       print("DEBUG: No se configuraron fechas - solo proceso OTP")
 
     opts = webdriver.ChromeOptions()
     opts.add_argument("--start-maximized")
     if HEADLESS:
         opts.add_argument("--headless=new")
-    # Fix ChromeDriver timeout issues by using a stable version
-    drv = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=opts)
+    opts.add_argument("--no-sandbox")
+    opts.add_argument("--disable-dev-shm-usage")
+
+    # Configurar prefs de descarga
+    configure_chrome_options_for_download(opts, DOWNLOAD_DIR)
+
+    # Crear driver y habilitar CDP para descargas
+    service = ChromeService(ChromeDriverManager().install())
+    drv = webdriver.Chrome(service=service, options=opts)
     drv.set_page_load_timeout(60)
     drv.implicitly_wait(10)
+    try:
+        enable_download_behavior_with_cdp(drv, DOWNLOAD_DIR)
+    except Exception:
+        pass
+
     try:
         wait = WebDriverWait(drv, 30)
 
@@ -662,7 +887,6 @@ def login_otp() -> bool:
         if GMAIL_USER and GMAIL_PASS:
             try:
                 m = imap_connect()
-                # Obtener el UID más alto como baseline
                 typ, data = m.uid("SEARCH", None, "ALL")
                 if typ == 'OK' and data and data[0]:
                     all_uids = [int(x) for x in data[0].split()]
@@ -671,10 +895,12 @@ def login_otp() -> bool:
                 else:
                     since_uid = 0
                     print("DEBUG: No se encontraron emails, baseline UID = 0")
-                m.logout()
             except Exception as e:
                 print(f"DEBUG: Error estableciendo baseline UID: {e}")
                 since_uid = None
+            finally:
+                try: m.logout()
+                except: pass
 
         # 5) Usar el último OTP encontrado directamente
         print("DEBUG: Usando el último OTP encontrado...")
@@ -716,7 +942,6 @@ def login_otp() -> bool:
             else:
                 print("DEBUG: ❌ Sin credenciales gmail -> no puede operar")
                 return False
-                return False
         except Exception as e:
             print(f"DEBUG: ❌ Error obteniendo OTP: {e}")
             return False
@@ -751,14 +976,14 @@ def login_otp() -> bool:
                 print("DEBUG: ✅ Código OTP pegado con send_keys")
             except Exception as e2:
                 print(f"DEBUG: ❌ Error con send_keys: {e2}")
-                try:
-                    # Método 3: Clear y send_keys
-                    otp_input.clear()
-                    otp_input.send_keys(otp_code)
-                    print("DEBUG: ✅ Código OTP pegado con clear + send_keys")
-                except Exception as e3:
-                    print(f"DEBUG: ❌ Error con clear + send_keys: {e3}")
-                    return False
+            try:
+                # Método 3: Clear y send_keys
+                otp_input.clear()
+                otp_input.send_keys(otp_code)
+                print("DEBUG: ✅ Código OTP pegado con clear + send_keys")
+            except Exception as e3:
+                print(f"DEBUG: ❌ Error con clear + send_keys: {e3}")
+            return False
         
         # Verificar que se pegó correctamente
         try:
@@ -782,15 +1007,10 @@ def login_otp() -> bool:
         except Exception as e:
             print(f"DEBUG: ❌ Error verificando valor del campo: {e}")
                 
-        except Exception as e:
-            print(f"DEBUG: ❌ Error pegando OTP: {e}")
-            # no se pudo pegar OTP -> fallo
-            return False
-
-        # 6.1) Pausa breve antes de confirmar (igual que bot.py)
+        # 6.1) Pausa antes de confirmar
         try:
-            print("DEBUG: Esperando 1s antes de confirmar/aceptar...")
-            time.sleep(1.0)
+            print("DEBUG: Esperando 4s antes de confirmar/aceptar...")
+            time.sleep(4.0)
         except Exception:
             pass
 
@@ -838,13 +1058,243 @@ def login_otp() -> bool:
             time.sleep(4)
         except Exception:
             pass
-        try:
-            print(f"DEBUG: Navegando a grilla: {TRANSFER_URL}")
-            drv.get(TRANSFER_URL)
-            print("DEBUG: Esperando 3s para que cargue la grilla...")
-            time.sleep(3)
-            
-            # Leer cuentas del dropdown
+        finally:
+            try:
+                print(f"DEBUG: Navegando a grilla: {TRANSFER_URL}")
+                drv.get(TRANSFER_URL)
+                print("DEBUG: Esperando 3s para que cargue la grilla...")
+                time.sleep(3)
+            except Exception as e:
+                print(f"DEBUG: Error navegando a la grilla: {e}")
+
+            # Si venimos en el segundo flujo con cuenta y fechas, seleccionarlas y completar filtros
+            account_sel = os.getenv("ACCOUNT_SEL")
+            if account_sel and date_from and date_to:
+                print(f"DEBUG: ▶︎ Modo filtros: seleccionar cuenta y fechas — account='{account_sel}', {date_from} → {date_to}")
+                try:
+                    # Abrir select2
+                    dropdown = drv.find_element(By.CSS_SELECTOR, "span.select2-selection.select2-selection--single")
+                    dropdown.click(); time.sleep(0.8)
+                    # Buscar opción por texto
+                    opts = drv.find_elements(By.CSS_SELECTOR, "li.select2-results__option")
+                    print(f"DEBUG: Opciones en select2: {len(opts)}")
+                    matched = None
+                    for el in opts:
+                        t = (el.text or "").strip()
+                        if not t: continue
+                        # Igualdad exacta o contains
+                        if t == account_sel or account_sel in t:
+                            matched = el; break
+                    if matched:
+                        try:
+                            drv.execute_script("arguments[0].scrollIntoView({block:'center'});", matched)
+                        except Exception:
+                            pass
+                        try:
+                            matched.click()
+                        except Exception:
+                            drv.execute_script("arguments[0].click();", matched)
+                        print("DEBUG: ✅ Cuenta seleccionada en dropdown")
+                    else:
+                        print("DEBUG: ❌ No se encontró la cuenta solicitada en el dropdown")
+
+                    # Completar fechas (6 inputs) en orden izquierda→derecha
+                    try:
+                        df_y, df_m, df_d = date_from.split("-")
+                        dt_y, dt_m, dt_d = date_to.split("-")
+                    except Exception:
+                        print("DEBUG: ❌ Formato de fechas inválido, esperado YYYY-MM-DD")
+                        return False
+
+                    pad2 = lambda s: str(s).zfill(2)
+                    pad4 = lambda s: str(s).zfill(4)
+                    vals = [
+                        (DIA_DESDE,  pad2(df_d)),
+                        (MES_DESDE,  pad2(df_m)),
+                        (ANO_DESDE,  pad4(df_y)),
+                        (DIA_HASTA,  pad2(dt_d)),
+                        (MES_HASTA,  pad2(dt_m)),
+                        (ANO_HASTA,  pad4(dt_y)),
+                    ]
+
+                    for fid, v in vals:
+                        try:
+                            el = locate(drv, By.ID, fid, 8) or drv.find_element(By.ID, fid)
+                        except Exception:
+                            el = None
+                        if not el:
+                            print(f"DEBUG: ❌ No se encontró input fecha id={fid}")
+                            continue
+                        try:
+                            drv.execute_script("arguments[0].scrollIntoView({block:'center'});", el)
+                        except Exception:
+                            pass
+                        try:
+                            el.click(); time.sleep(0.05)
+                        except Exception:
+                            pass
+                        # Limpieza robusta y tipeo
+                        try:
+                            el.send_keys(Keys.CONTROL, 'a'); el.send_keys(Keys.DELETE)
+                        except Exception:
+                            try:
+                                drv.execute_script("arguments[0].value='';", el)
+                            except Exception:
+                                pass
+                        ok_set = False
+                        try:
+                            el.send_keys(v); ok_set = True
+                        except Exception:
+                            try:
+                                drv.execute_script("arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('input',{bubbles:true})); arguments[0].dispatchEvent(new Event('change',{bubbles:true}));", el, v)
+                                ok_set = True
+                            except Exception:
+                                pass
+                        curr = None
+                        try:
+                            curr = el.get_attribute("value")
+                        except Exception:
+                            curr = None
+                        print(f"DEBUG: Fecha id={fid} seteada='{v}' leida='{curr}' ok={ok_set}")
+
+                    print("DEBUG: ✅ Filtros aplicados (cuenta y fechas). Esperando 4s...")
+                    try: time.sleep(4)
+                    except Exception: pass
+
+                    # Click en botón "Búsqueda" y esperar 3s
+                    try:
+                        btn = WebDriverWait(drv, 10).until(EC.element_to_be_clickable((By.ID, "sc_b_pesq_bot")))
+                        try:
+                            btn.click()
+                        except Exception:
+                            drv.execute_script("arguments[0].click();", btn)
+                        print("DEBUG: ✅ Click en botón Búsqueda realizado")
+                    except Exception as e:
+                        print(f"DEBUG: ❌ No se pudo hacer click en botón Búsqueda: {e}")
+
+                    try:
+                        print("DEBUG: Esperando 3s tras Búsqueda para cargar resultados...")
+                        time.sleep(3)
+                    except Exception:
+                        pass
+
+                    # ─── BLOQUE: exportar CSV ──────────────────────────────────
+                    try:
+                        # ➊ Click en el botón «Exportar»
+                        export_btn = WebDriverWait(drv, 10).until(
+                            EC.element_to_be_clickable((By.ID, "sc_btgp_btn_group_1_top"))
+                        )
+                        try:
+                            export_btn.click()
+                        except Exception:
+                            drv.execute_script("arguments[0].click();", export_btn)
+                        print("DEBUG: ✅ Click en botón Exportar realizado")
+                    except Exception as e:
+                        print(f"DEBUG: ❌ No se pudo hacer click en botón Exportar: {e}")
+
+                    # ➋ Esperar 1 s antes de elegir el formato
+                    try: time.sleep(1)
+                    except Exception: pass
+
+                    try:
+                        # ➌ Click en la opción «CSV» del menú desplegable
+                        csv_opt = WebDriverWait(drv, 10).until(
+                            EC.element_to_be_clickable((By.XPATH, "//a[normalize-space()='CSV']"))
+                        )
+                        try:
+                            csv_opt.click()
+                        except Exception:
+                            drv.execute_script("arguments[0].click();", csv_opt)
+                        print("DEBUG: ✅ Click en opción CSV realizado")
+                    except Exception as e:
+                        print(f"DEBUG: ❌ No se pudo hacer click en opción CSV: {e}")
+                    # ────────────────────────────────────────────────────────────────
+
+                    # ── NUEVOS PASOS ROBUSTOS: esperar 2s, click Aceptar (id=bok), esperar 10s, click idBtnDown ──
+                    try:
+                        print("DEBUG: Esperando 2s antes de intentar Aceptar (bok)...")
+                        time.sleep(2)
+                    except Exception:
+                        pass
+
+                    # Intentar click robusto en 'bok' (Aceptar / Confirmar)
+                    ok, msg = click_with_fallback(drv, wait, By.ID, "bok", timeout=12, check_iframe=True, js_last_resort=True)
+                    if ok:
+                        print(f"DEBUG: ✅ Click en botón Aceptar (bok) exitoso - método: {msg}")
+                    else:
+                        # Si falló con ID, intentar por XPath de texto como último intento antes de continuar
+                        try:
+                            print(f"DEBUG: Intentando fallback por texto para Aceptar (bok)...")
+                            ok2, msg2 = click_with_fallback(drv, wait, By.XPATH, "//a[normalize-space()='Aceptar' or contains(.,'Aceptar')]", timeout=8, check_iframe=True, js_last_resort=True)
+                            if ok2:
+                                print(f"DEBUG: ✅ Click en Aceptar por texto exitoso - método: {msg2}")
+                                ok = True
+                            else:
+                                print(f"DEBUG: ❌ Fallback por texto también falló: {msg2}")
+                        except Exception as e:
+                            print(f"DEBUG: ❌ Error en fallback por texto para Aceptar: {e}")
+
+                    if not ok:
+                        print("DEBUG: ❗ Continuamos a intentar descarga de todas formas (si procede)")
+
+                    # Esperar 10s para que el proceso de exportación genere el dialogo/archivo
+                    try:
+                        print("DEBUG: Esperando 10s antes de intentar Descargar (idBtnDown)...")
+                        time.sleep(10)
+                    except Exception:
+                        pass
+
+                    # Intentar click robusto en botón Descargar (idBtnDown)
+                    okd, msgd = click_with_fallback(drv, wait, By.ID, "idBtnDown", timeout=18, check_iframe=True, js_last_resort=False)
+                    if okd:
+                        print(f"DEBUG: ✅ Click en botón Descargar (idBtnDown) exitoso - método: {msgd}")
+                    else:
+                        # fallback por XPath / texto
+                        try:
+                            okd2, msgd2 = click_with_fallback(drv, wait, By.XPATH, "//a[normalize-space()='Descargar' or contains(.,'Descargar')]", timeout=8, check_iframe=True, js_last_resort=False)
+                            if okd2:
+                                print(f"DEBUG: ✅ Click en Descargar por texto exitoso - método: {msgd2}")
+                                okd = True
+                            else:
+                                print(f"DEBUG: ❌ No se pudo clicar Descargar (idBtnDown): {msgd2}")
+                        except Exception as e:
+                            print(f"DEBUG: ❌ Error en fallback por texto para Descargar: {e}")
+
+                    if not okd:
+                        # como último recurso intentar invocar JS downloadClick() si existe
+                        try:
+                            drv.execute_script("if(typeof downloadClick === 'function'){ downloadClick(); }")
+                            print("DEBUG: ✅ Ejecutado downloadClick() por JS como último recurso")
+                            okd = True
+                        except Exception as e:
+                            print(f"DEBUG: ❌ No se pudo invocar downloadClick() por JS: {e}")
+
+                    # Esperar 10s adicionales para que el archivo termine de descargarse
+                    try:
+                        print("DEBUG: Esperando 10s para que termine la descarga del CSV...")
+                        time.sleep(10)
+                    except Exception:
+                        pass
+
+                    # Buscar el CSV más reciente en DOWNLOAD_DIR y reportar ruta
+                    latest = find_latest_file(DOWNLOAD_DIR, pattern_exts=(".csv",))
+                    if latest:
+                        print(f"DEBUG: ✅ Archivo CSV descargado en: {latest}")
+                    else:
+                        print("DEBUG: ❌ No se detectó ningún CSV en la carpeta de descargas")
+
+                    try:
+                        print("DEBUG: Esperando 3s tras exportar/descargar para asegurarnos...")
+                        time.sleep(3)
+                    except Exception:
+                        pass
+
+                    return True
+                except Exception as e:
+                    print(f"DEBUG: ❌ Error aplicando filtros: {e}")
+                    # Continuar con lectura de cuentas como fallback
+
+            # Primer flujo: leer cuentas para mostrarlas en el diálogo
             print("DEBUG: Buscando dropdown de cuentas...")
             try:
                 # Intentar abrir el dropdown haciendo click
@@ -852,12 +1302,12 @@ def login_otp() -> bool:
                 print(f"DEBUG: Dropdown encontrado: {dropdown}")
                 dropdown.click()
                 time.sleep(1)
-                
+
                 # Leer todas las opciones disponibles
                 options = drv.find_elements(By.CSS_SELECTOR, "li.select2-results__option")
                 accounts = []
                 print(f"DEBUG: Encontradas {len(options)} opciones en el dropdown")
-                
+
                 for i, option in enumerate(options):
                     try:
                         text = option.text
@@ -868,9 +1318,9 @@ def login_otp() -> bool:
                     except Exception as e:
                         print(f"DEBUG: Error leyendo opción {i+1}: {e}")
                         continue
-                
+
                 print(f"DEBUG: Total de cuentas leídas: {len(accounts)}")
-                
+
                 # Guardar las cuentas para retornarlas
                 if accounts:
                     print("DEBUG: ✅ Cuentas leídas exitosamente")
@@ -883,55 +1333,11 @@ def login_otp() -> bool:
                         _orig_print(json.dumps({"accounts": accounts}, ensure_ascii=True))
                 else:
                     print("DEBUG: ❌ No se encontraron cuentas en el dropdown")
-                    
+
             except Exception as e:
                 print(f"DEBUG: ❌ Error leyendo dropdown de cuentas: {e}")
-                
-        except Exception as e:
-            print(f"DEBUG: ❌ Error navegando a grilla: {e}")
 
         print("DEBUG: Retornando True - flujo post-OTP completado")
-        return True
-        
-        # COMENTADO TEMPORALMENTE - Todo el proceso posterior al OTP
-        # time.sleep(55)
-
-        # COMENTADO TEMPORALMENTE - Todo el proceso posterior al OTP
-        # # 9) Rellenar fechas
-        # time.sleep(3)
-        # for _id, _val in [
-        #     (DIA_DESDE, df_d), (MES_DESDE, df_m), (ANO_DESDE, df_y),
-        #     (DIA_HASTA, dt_d), (MES_HASTA, dt_m), (ANO_HASTA, dt_y)
-        # ]:
-        #     el = locate(drv, By.ID, _id, 8)
-        #     if el:
-        #         try: el.clear()
-        #         except: pass
-        #         el.send_keys(_val)
-        # 
-        # # seleccionar cuenta elegida (opcional)
-        # account_sel = os.getenv("ACCOUNT_SEL")
-        # if account_sel:
-        #     try:
-        #         js = """
-        #           const v = arguments[0], sels = arguments[1];
-        #           for(const q of sels){
-        #             const sel=document.querySelector(q); if(!sel) continue;
-        #             for(const o of sel.options){
-        #               if(o.value==v || o.text.trim()==v){
-        #                 sel.value=o.value; sel.dispatchEvent(new Event('change'));
-        #                 return true;
-        #               }
-        #             }
-        #           } return false;
-        #         """
-        #         drv.execute_script(js, account_sel, [s.strip() for s in ACCOUNTS_SELECTOR.split(",") if s.strip()])
-        #     except: pass
-        # 
-        # time.sleep(5)
-        
-        # Solo retornar True después del OTP exitoso
-        print("DEBUG: Retornando True - proceso OTP completado")
         return True
 
     except Exception as e:

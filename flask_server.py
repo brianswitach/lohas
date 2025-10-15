@@ -96,6 +96,14 @@ const st=document.getElementById('status');
 const log=document.getElementById('log');
 const logc=document.getElementById('logcard');
 const jobsDiv=document.getElementById('jobs');
+// Variables globales para almacenar cuentas individuales
+window.cuenta1=undefined; window.cuenta2=undefined; window.cuenta3=undefined;
+function accountsFromVars(){
+  const out=[];
+  const push=(c)=>{ if(!c) return; if(typeof c==='object'){ out.push({value:c.value||c.text||'', text:c.text||String(c)}); } else { out.push({value:String(c), text:String(c)}); } };
+  push(window.cuenta1); push(window.cuenta2); push(window.cuenta3);
+  return out;
+}
 function pills(j){ jobsDiv.innerHTML=''; Object.keys(j).forEach(id=>{const d=document.createElement('span');d.className='job-pill';d.textContent=id+' - '+j[id].status;jobsDiv.appendChild(d);});}
 async function jobs(){ const r=await fetch('/jobs'); if(r.ok) pills(await r.json()); }
 
@@ -121,8 +129,9 @@ function openDateDialog(accounts=null, cb=null){
   const dlg=document.getElementById('dateDlg'); const sel=document.getElementById('accountSelect');
   const save=document.getElementById('dlgSaveBtn'); const cancel=document.getElementById('dlgCancelBtn');
   
-  // Si ya tenemos cuentas, poblar inmediatamente
-  if(accounts && Array.isArray(accounts)){
+  // Si ya tenemos cuentas (o variables globales), poblar inmediatamente
+  if((accounts && Array.isArray(accounts) && accounts.length>0) || accountsFromVars().length>0){
+    if((!accounts || accounts.length===0) && accountsFromVars().length>0){ accounts = accountsFromVars(); }
     sel.innerHTML='';
     accounts.forEach(a=>{
       const opt=document.createElement('option');
@@ -180,28 +189,29 @@ document.getElementById('runCsvBtn').onclick = ()=>{
   startJob('csv', {}, (logText)=>{
     console.log('Bot CSV completado, parseando log...');
     console.log('Longitud del log:', logText.length);
-    // 1) Preferir marcador ACCOUNTS_JSON:... (línea única)
+    // 1) Intento de extracción ultra-sencillo: última línea que empieza con {"accounts":
     let accounts = [];
     try{
-      const i = logText.lastIndexOf('ACCOUNTS_JSON:');
-      if(i !== -1){
-        const tail = logText.slice(i + 'ACCOUNTS_JSON:'.length).split('\\n')[0].trim();
-        const parsed = JSON.parse(tail);
-        accounts = parsed.accounts || [];
+      const lines = logText.split('\\n');
+      for(let i=lines.length-1;i>=0;i--){
+        const ln = lines[i].trim();
+        if(ln.startsWith('{"accounts":')){
+          const parsed = JSON.parse(ln);
+          accounts = parsed.accounts || [];
+          break;
+        }
       }
-    }catch(e){ console.warn('Marcador ACCOUNTS_JSON no parseable:', e); }
+    }catch(e){ console.warn('Parse simple falló:', e); }
 
-    // 2) Fallback: regex global si no hubo marcador
+    // 2) Fallback aún más simple: buscar "Cuenta 1:" y "Cuenta 2:" en el log y construir variables
     if(accounts.length===0){
       try{
-        const re = /\{"accounts"\s*:\s*\[(?:[\s\S]*?)\]\}/gm;
-        const matches = logText.match(re) || [];
-        if(matches.length>0){
-          const raw = matches[matches.length-1];
-          const parsed = JSON.parse(raw);
-          accounts = parsed.accounts || [];
-        }
-      }catch(e){ console.error('Fallo parseando JSON por regex:', e); }
+        const accs=[]; 
+        const reLine=/^DEBUG:\s*Cuenta\s*(\d+)\s*:\s*(.+)$/gm; 
+        let m; 
+        while((m=reLine.exec(logText))!==null){ accs[parseInt(m[1],10)-1] = {value:m[2].trim(), text:m[2].trim()}; }
+        if(accs.filter(Boolean).length>0){ accounts = accs.filter(Boolean); }
+      }catch(e){ console.warn('Fallback por líneas DEBUG falló:', e); }
     }
     
     console.log('Cuentas encontradas:', accounts.length);
@@ -209,10 +219,24 @@ document.getElementById('runCsvBtn').onclick = ()=>{
     // Abrir diálogo con las cuentas
     if(accounts.length > 0){
       console.log('Abriendo diálogo con cuentas:', accounts);
-      openDateDialog(accounts, (payload)=>startJob('csv', payload));
+      // Guardar en variables globales cuenta1, cuenta2, cuenta3
+      try{
+        window.cuenta1 = accounts[0] || undefined;
+        window.cuenta2 = accounts[1] || undefined;
+        window.cuenta3 = accounts[2] || undefined;
+      }catch(e){ console.warn('No se pudieron setear variables cuenta1/2/3:', e); }
+      // Usar las variables para poblar el diálogo
+      openDateDialog(accountsFromVars(), (payload)=>startJob('csv', payload));
     } else {
       console.error('No se encontraron cuentas en el log');
-      alert('No se pudieron cargar las cuentas. Revisa el log.');
+      // Intentar abrir con variables existentes (si quedaron de una ejecución previa)
+      const fallback = accountsFromVars();
+      if(fallback.length>0){
+        console.log('Usando variables existentes cuenta1/2/3:', fallback);
+        openDateDialog(fallback, (payload)=>startJob('csv', payload));
+      } else {
+        alert('No se pudieron cargar las cuentas. Revisa el log.');
+      }
     }
   });
 };

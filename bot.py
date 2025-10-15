@@ -11,6 +11,7 @@ COMPLETADA / FALLIDA por intento) + resumen al final de cada pasada.
 """
 from __future__ import annotations
 import builtins
+import csv
 import os
 import re
 import sys
@@ -19,7 +20,7 @@ import imaplib
 import email
 import email.header
 from email.utils import parsedate_to_datetime
-from typing import List, Optional, Tuple, Callable
+from typing import List, Optional, Tuple, Callable, Dict, Any
 from datetime import datetime
 
 
@@ -137,8 +138,8 @@ GMAIL_IMAP_HOST = "imap.gmail.com"
 GMAIL_USER = "brianswitach@gmail.com"
 GMAIL_PASS = "nlrsuamujfrictoh"
 
-# Habilitar/deshabilitar modo headless -> Cambia a True para activar headless.
-HEADLESS = True
+# Modo visible (sin headless)
+HEADLESS = False
 
 # regex para extraer OTP (frase exacta y fallback dígitos)
 OTP_PHRASE_RE = re.compile(r"su\s+c[oó]digo\s+de\s+inicio\s+de\s+sesi[oó]n\s+es\s*[:\s,-]*?(\d{4,8})", re.I)
@@ -1101,9 +1102,73 @@ def click_confirm_button(driver: webdriver.Chrome, wait: WebDriverWait, timeout:
 
 
 # ---------------------------
+# CSV HELPERS
+# ---------------------------
+def select_csv_file() -> Optional[str]:
+    """
+    Abre un diálogo para seleccionar un archivo CSV.
+    Devuelve la ruta del archivo o None si se cancela.
+    """
+    # Intentar usar osascript (AppleScript) directamente en macOS
+    try:
+        import subprocess
+        script = '''
+        tell application "System Events"
+            activate
+            set theFile to choose file with prompt "Por favor, adjunte el CSV" of type {"csv", "public.comma-separated-values-text"}
+            return POSIX path of theFile
+        end tell
+        '''
+        result = subprocess.run(['osascript', '-e', script], 
+                              capture_output=True, 
+                              text=True, 
+                              timeout=300)
+        if result.returncode == 0:
+            file_path = result.stdout.strip()
+            return file_path if file_path else None
+        else:
+            _orig_print("AppleScript cancelado o falló")
+            return None
+    except Exception as e:
+        _orig_print(f"Error con AppleScript: {e}")
+        # Último fallback: input manual
+        _orig_print("\n=== Por favor, adjunte el CSV ===")
+        file_path = input("Ingrese la ruta completa del archivo CSV: ").strip()
+        # Remover comillas si las hay
+        file_path = file_path.strip('"').strip("'")
+        if file_path and os.path.isfile(file_path):
+            return file_path
+        else:
+            _orig_print(f"Archivo no encontrado: {file_path}")
+            return None
+
+
+def read_transfers_from_csv(csv_path: str) -> List[Dict[str, Any]]:
+    """
+    Lee el CSV y devuelve una lista de diccionarios con los datos de cada transferencia.
+    Cada diccionario tiene al menos las claves: 'CBU_DESTINO', 'MONTO', y el resto de columnas disponibles.
+    """
+    transfers = []
+    try:
+        with open(csv_path, 'r', encoding='utf-8-sig') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                # Verificar que tenga las columnas requeridas
+                if 'CBU_DESTINO' in row and 'MONTO' in row:
+                    transfers.append(dict(row))
+                else:
+                    _orig_print(f"ADVERTENCIA: Fila sin CBU_DESTINO o MONTO: {row}")
+    except Exception as e:
+        _orig_print(f"ERROR leyendo CSV: {e}")
+        return []
+    
+    return transfers
+
+
+# ---------------------------
 # Opción B (secuencia principal)
 # ---------------------------
-def opcion_b_selenium() -> bool:
+def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = "10000") -> bool:
     """
     Ejecuta una transferencia completa en una nueva instancia de navegador.
     Devuelve True si la transferencia se consideró exitosa, False en caso contrario.
@@ -1121,20 +1186,31 @@ def opcion_b_selenium() -> bool:
         # usar modo headless moderno si disponible
         options.add_argument("--headless=new")
 
-    # Fix ChromeDriver timeout issues by using a stable version
+    # Crear driver con Selenium 4 usando ChromeService
     try:
-        # Clear cache and get latest compatible version
-        driver = webdriver.Chrome(
-            executable_path=ChromeDriverManager().install(),
-            options=options
-        )
+        from selenium.webdriver.chrome.service import Service as ChromeService
+    except Exception:
+        ChromeService = None
+
+    try:
+        if ChromeService is not None:
+            service = ChromeService(ChromeDriverManager().install())
+            driver = webdriver.Chrome(service=service, options=options)
+        else:
+            # Compat con Selenium 3: usar constructor simple sin executable_path
+            driver = webdriver.Chrome(options=options)
     except Exception as e:
         print(f"ERROR_DEBUG:ChromeDriverManager falló: {str(e)}")
-        # Fallback to system chromedriver if available
-        driver = webdriver.Chrome(
-            executable_path="chromedriver",
-            options=options
-        )
+        # Fallback a chromedriver en PATH usando Service si es posible
+        try:
+            if ChromeService is not None:
+                service = ChromeService()
+                driver = webdriver.Chrome(service=service, options=options)
+            else:
+                driver = webdriver.Chrome(options=options)
+        except Exception as e2:
+            print(f"ERROR_DEBUG:Fallo creando driver con fallback: {e2}")
+            raise
     
     # Set proper timeouts to prevent hanging
     driver.set_page_load_timeout(60)
@@ -1292,10 +1368,10 @@ def opcion_b_selenium() -> bool:
                         except Exception:
                             pass
                     try:
-                        cuenta_el.send_keys(CUENTA_TO_PASTE)
+                        cuenta_el.send_keys(cbu_destino)
                     except Exception:
                         try:
-                            driver.execute_script("arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('change'));", cuenta_el, CUENTA_TO_PASTE)
+                            driver.execute_script("arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('change'));", cuenta_el, cbu_destino)
                         except Exception:
                             pass
                 # primer Próximo
@@ -1310,7 +1386,7 @@ def opcion_b_selenium() -> bool:
                 time.sleep(2)
                 amount_input = find_first_numeric_input(driver, timeout=12)
                 if amount_input:
-                    set_input_value(driver, amount_input, "10000")
+                    set_input_value(driver, amount_input, str(monto))
                 # select2
                 select_select2_option_choose_varios_or_last(driver, SELECT2_COMBO_CSS, timeout=12)
                 # último Próximo
@@ -1413,33 +1489,69 @@ def opcion_b_selenium() -> bool:
 # Si fallan, reintentar pasadas hasta que se completen (espera 3s entre reintentos).
 # ---------------------------
 def main():
-    runs = 1
+    # Primero: abrir diálogo para seleccionar CSV
+    _orig_print("Abriendo diálogo para seleccionar CSV...")
+    csv_path = select_csv_file()
+    
+    if not csv_path:
+        _orig_print("ERROR: No se seleccionó ningún archivo CSV. Abortando.")
+        return
+    
+    _orig_print(f"CSV seleccionado: {csv_path}")
+    
+    # Leer transferencias del CSV
+    transfers = read_transfers_from_csv(csv_path)
+    
+    if not transfers:
+        _orig_print("ERROR: No se encontraron transferencias válidas en el CSV. Abortando.")
+        return
+    
+    _orig_print(f"Se encontraron {len(transfers)} transferencias en el CSV")
+    
+    # Estructura para tracking: diccionario {índice: {'transfer': datos, 'status': 'pending'|'done'|'failed'}}
+    transfer_status: Dict[int, Dict[str, Any]] = {}
+    for idx, transfer in enumerate(transfers, start=1):
+        transfer_status[idx] = {
+            'transfer': transfer,
+            'status': 'pending',
+            'cbu': transfer.get('CBU_DESTINO', ''),
+            'monto': transfer.get('MONTO', '')
+        }
+    
     failed: List[int] = []
     pass_number = 1
 
     # Primera pasada
-    for i in range(1, runs + 1):
-        print(f"TRANSFE_START:{i}")
+    for idx in range(1, len(transfers) + 1):
+        t_data = transfer_status[idx]
+        cbu = t_data['cbu']
+        monto = t_data['monto']
+        
+        print(f"TRANSFE_START:{idx}")
         try:
-            ok = opcion_b_selenium()
+            ok = opcion_b_selenium(cbu_destino=cbu, monto=monto)
             if ok:
-                print(f"TRANSFE_DONE:{i}")
+                print(f"TRANSFE_DONE:{idx}")
+                transfer_status[idx]['status'] = 'done'
             else:
-                print(f"TRANSFE_FAILED:{i}")
-                failed.append(i)
+                print(f"TRANSFE_FAILED:{idx}")
+                transfer_status[idx]['status'] = 'failed'
+                failed.append(idx)
         except KeyboardInterrupt:
-            print(f"TRANSFE_FAILED:{i}")
-            failed.append(i)
+            print(f"TRANSFE_FAILED:{idx}")
+            transfer_status[idx]['status'] = 'failed'
+            failed.append(idx)
             raise
         except Exception as e:
             print(f"ERROR_DEBUG:Excepción en bucle principal: {str(e)}")
-            print(f"TRANSFE_FAILED:{i}")
-            failed.append(i)
+            print(f"TRANSFE_FAILED:{idx}")
+            transfer_status[idx]['status'] = 'failed'
+            failed.append(idx)
         # esperar 2 segundos entre ventanas (pasada inicial)
         time.sleep(2)
 
     # Resumen de la primera pasada
-    completed_first = [str(x) for x in range(1, runs + 1) if x not in failed]
+    completed_first = [str(x) for x in range(1, len(transfers) + 1) if x not in failed]
     failed_first = [str(x) for x in failed]
     comp_str = ",".join(completed_first) if completed_first else "none"
     fail_str = ",".join(failed_first) if failed_first else "none"
@@ -1453,26 +1565,34 @@ def main():
         succeeded_this_pass: List[int] = []
         failed_this_pass: List[int] = []
 
-        for t in current_failed:
-            print(f"TRANSFE_START:{t}")
+        for idx in current_failed:
+            t_data = transfer_status[idx]
+            cbu = t_data['cbu']
+            monto = t_data['monto']
+            
+            print(f"TRANSFE_START:{idx}")
             try:
-                ok = opcion_b_selenium()
+                ok = opcion_b_selenium(cbu_destino=cbu, monto=monto)
                 if ok:
-                    print(f"TRANSFE_DONE:{t}")
-                    succeeded_this_pass.append(t)
+                    print(f"TRANSFE_DONE:{idx}")
+                    transfer_status[idx]['status'] = 'done'
+                    succeeded_this_pass.append(idx)
                 else:
-                    print(f"TRANSFE_FAILED:{t}")
-                    failed_this_pass.append(t)
+                    print(f"TRANSFE_FAILED:{idx}")
+                    transfer_status[idx]['status'] = 'failed'
+                    failed_this_pass.append(idx)
                 # esperar 3 segundos entre reintentos individuales
                 time.sleep(3)
             except KeyboardInterrupt:
-                print(f"TRANSFE_FAILED:{t}")
-                failed_this_pass.append(t)
+                print(f"TRANSFE_FAILED:{idx}")
+                transfer_status[idx]['status'] = 'failed'
+                failed_this_pass.append(idx)
                 raise
             except Exception as e:
                 print(f"ERROR_DEBUG:Excepción en bucle de reintentos: {str(e)}")
-                print(f"TRANSFE_FAILED:{t}")
-                failed_this_pass.append(t)
+                print(f"TRANSFE_FAILED:{idx}")
+                transfer_status[idx]['status'] = 'failed'
+                failed_this_pass.append(idx)
                 time.sleep(3)
                 continue
 
