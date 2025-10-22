@@ -11,6 +11,7 @@ Antes de usar el bot, necesitás tener activa la **Verificación en 2 pasos** y 
 2. Entrá a tu **Cuenta de Google** (icono de perfil → "Gestionar tu Cuenta de Google").
 3. En el menú lateral, entrá a **Seguridad y acceso** (o "Seguridad").
 4. En la sección **Cómo acceder a Google**, seleccioná **Verificación en 2 pasos** y activala.
+   - Acceso directo: [Página de Seguridad de Google](https://myaccount.google.com/security)
 
 ### B) Crear la Contraseña de aplicación
 1. En tu **Cuenta de Google**, buscá "contraseñas de aplicación".
