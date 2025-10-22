@@ -244,7 +244,18 @@ async function jobs(){ const r=await fetch('/jobs'); if(r.ok) pills(await r.json
 
 async function startJob(type, payload={}, onComplete=null){
   const r=await fetch('/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type, ...payload})});
-  if(!r.ok){st.textContent='Error';return;}
+  if(!r.ok){
+    try{
+      const errorData = await r.json();
+      if(errorData.error === 'credentials_missing'){
+        alert('⚠️ Faltan credenciales\\n\\n' + errorData.message + '\\n\\nRedirigiendo a configuración...');
+        window.location.href = '/setup';
+        return;
+      }
+    }catch(e){}
+    st.textContent='Error';
+    return;
+  }
   const {job_id}=await r.json(); st.textContent='Job '+job_id; logc.style.display='block';
   const int=setInterval(async()=>{
     const s=await fetch('/status/'+job_id); if(!s.ok)return;
@@ -423,11 +434,21 @@ def index():
         return render_template_string(SETUP_HTML)
     return render_template_string(INDEX_HTML)
 
+@APP.route("/setup")
+def setup():
+    """Ruta para acceder manualmente a la configuración"""
+    return render_template_string(SETUP_HTML)
+
 @APP.route("/jobs")
 def jobs_list(): return jsonify(JOBS)
 
 @APP.route("/run", methods=["POST"])
 def run_job():
+    # Validar que existan credenciales antes de ejecutar
+    if not check_credentials_configured():
+        return jsonify({"error": "credentials_missing", 
+                       "message": "Faltan credenciales. Por favor, configurá tus credenciales primero."}), 400
+    
     data = request.get_json(silent=True) or {}
     job_type = data.get("type", "transfer")
     if job_type not in ("transfer", "csv"): return ("type inválido", 400)
@@ -493,6 +514,10 @@ def start_account_scan_job():
 
 @APP.route("/fetch_accounts", methods=["POST"])
 def fetch_accounts():
+    # Validar que existan credenciales antes de ejecutar
+    if not check_credentials_configured():
+        return jsonify({"error": "credentials_missing", 
+                       "message": "Faltan credenciales. Por favor, configurá tus credenciales primero."}), 400
     job_id = start_account_scan_job(); return jsonify({"job_id": job_id})
 
 @APP.route("/accounts/<job_id>")

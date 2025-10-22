@@ -68,9 +68,9 @@ builtins.print = _minimal_print
 #  CONFIG & CONSTANTES WEB ───────────────────────────
 URL_B            = "https://app.lohas.eco/app_Login"
 
-# Credenciales Lohas (desde .env)
-USER_B           = os.getenv("USER_LOHAS", "briansw")
-PASS_B           = os.getenv("PASS_LOHAS", "lJ63STxqrXulcuhwizX3")
+# Credenciales Lohas (desde .env - requeridas)
+USER_B           = os.getenv("USER_LOHAS", "")
+PASS_B           = os.getenv("PASS_LOHAS", "")
 FIELD_LOGIN_ID   = "id_sc_field_login"
 FIELD_PASS_ID    = "id_sc_field_pswd"
 LOGIN_BTN_CSS    = "input.button[onclick*='nm_atualiza']"
@@ -95,9 +95,9 @@ HEADLESS = os.getenv("HEADLESS", "0").lower() not in ("0", "false", "no")
 # ───────────────────────── CONSTANTES IMAP / SMTP ───────────────────────────
 GMAIL_IMAP_HOST  = "imap.gmail.com"
 
-# Credenciales Gmail (desde .env)
-GMAIL_USER       = os.getenv("GMAIL_USER", "brianswitach@gmail.com")
-GMAIL_PASS       = os.getenv("GMAIL_PASS", "nlrsuamujfrictoh")
+# Credenciales Gmail (desde .env - requeridas)
+GMAIL_USER       = os.getenv("GMAIL_USER", "")
+GMAIL_PASS       = os.getenv("GMAIL_PASS", "")
 
 KNOWN_SENDER     = "sistema@lohas.eco"
 

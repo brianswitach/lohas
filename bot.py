@@ -107,9 +107,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 # ---------------------------
 URL_B = "https://app.lohas.eco/app_Login"
 
-# Credenciales Lohas (desde .env)
-USER_B = os.getenv("USER_LOHAS", "briansw")
-PASS_B = os.getenv("PASS_LOHAS", "lJ63STxqrXulcuhwizX3")
+# Credenciales Lohas (desde .env - requeridas)
+USER_B = os.getenv("USER_LOHAS", "")
+PASS_B = os.getenv("PASS_LOHAS", "")
 
 FIELD_LOGIN_ID = "id_sc_field_login"
 FIELD_PASS_ID = "id_sc_field_pswd"
@@ -141,10 +141,10 @@ SELECT2_COMBO_CSS = "span.select2-selection.select2-selection--single.css_idconc
 TOKEN_FIELD_ID = "id_sc_field_token_cliente"
 TOKEN_CONFIRM_BTN_ID = "sc_confirmar_bot"
 
-# Gmail IMAP (desde .env, con fallback a valores por defecto)
+# Gmail IMAP (desde .env - requeridas)
 GMAIL_IMAP_HOST = "imap.gmail.com"
-GMAIL_USER = os.getenv("GMAIL_USER", "brianswitach@gmail.com")
-GMAIL_PASS = os.getenv("GMAIL_PASS", "nlrsuamujfrictoh")
+GMAIL_USER = os.getenv("GMAIL_USER", "")
+GMAIL_PASS = os.getenv("GMAIL_PASS", "")
 
 # Modo visible (sin headless)
 HEADLESS = False
