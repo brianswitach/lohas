@@ -1165,39 +1165,75 @@ def select_csv_file() -> Optional[str]:
     """
     Abre un diálogo para seleccionar un archivo CSV.
     Devuelve la ruta del archivo o None si se cancela.
+    Compatible con Windows, macOS y Linux.
     """
-    # Intentar usar osascript (AppleScript) directamente en macOS
+    import platform
+    system = platform.system()
+    
+    # Método 1: Intentar usar tkinter (funciona en Windows, macOS y Linux)
     try:
-        import subprocess
-        script = '''
-        tell application "System Events"
-            activate
-            set theFile to choose file with prompt "Por favor, adjunte el CSV" of type {"csv", "public.comma-separated-values-text"}
-            return POSIX path of theFile
-        end tell
-        '''
-        result = subprocess.run(['osascript', '-e', script], 
-                              capture_output=True, 
-                              text=True, 
-                              timeout=300)
-        if result.returncode == 0:
-            file_path = result.stdout.strip()
-            return file_path if file_path else None
-        else:
-            _orig_print("AppleScript cancelado o falló")
-            return None
-    except Exception as e:
-        _orig_print(f"Error con AppleScript: {e}")
-        # Último fallback: input manual
-        _orig_print("\n=== Por favor, adjunte el CSV ===")
-        file_path = input("Ingrese la ruta completa del archivo CSV: ").strip()
-        # Remover comillas si las hay
-        file_path = file_path.strip('"').strip("'")
-        if file_path and os.path.isfile(file_path):
+        import tkinter as tk
+        from tkinter import filedialog
+        
+        # Crear una ventana raíz oculta
+        root = tk.Tk()
+        root.withdraw()  # Ocultar la ventana principal
+        root.attributes('-topmost', True)  # Traer al frente
+        
+        # Abrir diálogo de selección de archivo
+        file_path = filedialog.askopenfilename(
+            title="Por favor, seleccione el archivo CSV",
+            filetypes=[
+                ("Archivos CSV", "*.csv"),
+                ("Todos los archivos", "*.*")
+            ]
+        )
+        
+        root.destroy()  # Cerrar la ventana
+        
+        if file_path:
+            _orig_print(f"Archivo seleccionado: {file_path}")
             return file_path
         else:
-            _orig_print(f"Archivo no encontrado: {file_path}")
+            _orig_print("Selección cancelada")
             return None
+            
+    except Exception as e:
+        _orig_print(f"Error con tkinter: {e}")
+    
+    # Método 2: En macOS, intentar AppleScript
+    if system == "Darwin":
+        try:
+            import subprocess
+            script = '''
+            tell application "System Events"
+                activate
+                set theFile to choose file with prompt "Por favor, adjunte el CSV" of type {"csv", "public.comma-separated-values-text"}
+                return POSIX path of theFile
+            end tell
+            '''
+            result = subprocess.run(['osascript', '-e', script], 
+                                  capture_output=True, 
+                                  text=True, 
+                                  timeout=300)
+            if result.returncode == 0:
+                file_path = result.stdout.strip()
+                return file_path if file_path else None
+            else:
+                _orig_print("AppleScript cancelado o falló")
+        except Exception as e:
+            _orig_print(f"Error con AppleScript: {e}")
+    
+    # Método 3: Fallback - input manual (funciona en todos los sistemas)
+    _orig_print("\n=== Por favor, adjunte el CSV ===")
+    file_path = input("Ingrese la ruta completa del archivo CSV: ").strip()
+    # Remover comillas si las hay
+    file_path = file_path.strip('"').strip("'")
+    if file_path and os.path.isfile(file_path):
+        return file_path
+    else:
+        _orig_print(f"Archivo no encontrado: {file_path}")
+        return None
 
 
 def read_transfers_from_csv(csv_path: str) -> List[Dict[str, Any]]:
