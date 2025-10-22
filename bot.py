@@ -23,6 +23,10 @@ from email.utils import parsedate_to_datetime
 from typing import List, Optional, Tuple, Callable, Dict, Any
 from datetime import datetime
 import json
+from dotenv import load_dotenv
+
+# Cargar variables de entorno desde .env
+load_dotenv()
 
 
 
@@ -102,8 +106,11 @@ from webdriver_manager.chrome import ChromeDriverManager
 # CONFIG
 # ---------------------------
 URL_B = "https://app.lohas.eco/app_Login"
-USER_B = "briansw"
-PASS_B = "lJ63STxqrXulcuhwizX3"
+
+# Credenciales Lohas (desde .env)
+USER_B = os.getenv("USER_LOHAS", "briansw")
+PASS_B = os.getenv("PASS_LOHAS", "lJ63STxqrXulcuhwizX3")
+
 FIELD_LOGIN_ID = "id_sc_field_login"
 FIELD_PASS_ID = "id_sc_field_pswd"
 LOGIN_BTN_CSS = 'input.button[onclick*="nm_atualiza"]'
@@ -134,10 +141,10 @@ SELECT2_COMBO_CSS = "span.select2-selection.select2-selection--single.css_idconc
 TOKEN_FIELD_ID = "id_sc_field_token_cliente"
 TOKEN_CONFIRM_BTN_ID = "sc_confirmar_bot"
 
-# Gmail IMAP (opcional para OTP y para código de confirmación)
+# Gmail IMAP (desde .env, con fallback a valores por defecto)
 GMAIL_IMAP_HOST = "imap.gmail.com"
-GMAIL_USER = "brianswitach@gmail.com"
-GMAIL_PASS = "nlrsuamujfrictoh"
+GMAIL_USER = os.getenv("GMAIL_USER", "brianswitach@gmail.com")
+GMAIL_PASS = os.getenv("GMAIL_PASS", "nlrsuamujfrictoh")
 
 # Modo visible (sin headless)
 HEADLESS = False

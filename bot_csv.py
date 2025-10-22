@@ -44,8 +44,12 @@ from selenium.common.exceptions import (
 )
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
+from dotenv import load_dotenv
 
 from bot import get_latest_otp_gmail  # si no existe, comentar o implementar
+
+# Cargar variables de entorno desde .env
+load_dotenv()
 
 # ───────────────────────── PRINT MÍNIMO ──────────────────────────────────────
 _orig_print = builtins.print
@@ -63,8 +67,10 @@ builtins.print = _minimal_print
 # ─────────────────────────
 #  CONFIG & CONSTANTES WEB ───────────────────────────
 URL_B            = "https://app.lohas.eco/app_Login"
-USER_B           = "briansw"
-PASS_B           = "lJ63STxqrXulcuhwizX3"
+
+# Credenciales Lohas (desde .env)
+USER_B           = os.getenv("USER_LOHAS", "briansw")
+PASS_B           = os.getenv("PASS_LOHAS", "lJ63STxqrXulcuhwizX3")
 FIELD_LOGIN_ID   = "id_sc_field_login"
 FIELD_PASS_ID    = "id_sc_field_pswd"
 LOGIN_BTN_CSS    = "input.button[onclick*='nm_atualiza']"
@@ -88,8 +94,11 @@ HEADLESS = os.getenv("HEADLESS", "0").lower() not in ("0", "false", "no")
 
 # ───────────────────────── CONSTANTES IMAP / SMTP ───────────────────────────
 GMAIL_IMAP_HOST  = "imap.gmail.com"
-GMAIL_USER       = "brianswitach@gmail.com"
-GMAIL_PASS       = "nlrsuamujfrictoh"
+
+# Credenciales Gmail (desde .env)
+GMAIL_USER       = os.getenv("GMAIL_USER", "brianswitach@gmail.com")
+GMAIL_PASS       = os.getenv("GMAIL_PASS", "nlrsuamujfrictoh")
+
 KNOWN_SENDER     = "sistema@lohas.eco"
 
 # Directorio donde se guardarán las descargas (relativo al cwd)

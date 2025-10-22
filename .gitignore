@@ -2,6 +2,7 @@
 __pycache__/
 *.pyc
 .env
+.env.local
 venv/
 run_logs/
 transfer_logs/

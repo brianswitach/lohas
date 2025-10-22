@@ -11,14 +11,149 @@ import os, sys, uuid, time, subprocess, threading, json
 from pathlib import Path
 from threading import Thread
 from flask import Flask, request, jsonify, render_template_string
+from dotenv import load_dotenv, set_key, find_dotenv
 
 APP = Flask(__name__)
+
+# Cargar variables de entorno desde .env
+load_dotenv()
+
+# Verificar si existe .env, si no, crearlo vacío
+ENV_FILE = find_dotenv()
+if not ENV_FILE:
+    ENV_FILE = os.path.join(os.getcwd(), '.env')
+    with open(ENV_FILE, 'w') as f:
+        f.write('# Configuración de credenciales\n')
+        f.write('GMAIL_USER=\n')
+        f.write('GMAIL_PASS=\n')
+        f.write('USER_LOHAS=\n')
+        f.write('PASS_LOHAS=\n')
 
 LOGS_DIR = Path("run_logs"); LOGS_DIR.mkdir(exist_ok=True)
 JOBS: dict[str, dict] = {}
 FILE_HANDLES: dict[str, object] = {}
 
 # ───────────────────────────────  HTML UI  ───────────────────────────────────
+SETUP_HTML = """<!doctype html>
+<html><head>
+<meta charset="utf-8"/><title>Configuración Inicial - Lohas Bot</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--bg:#0f1724;--card:#0b1220;--accent:#10b981;--muted:#9aa5b1;--pad:18px;}
+body{font-family:Inter,Arial;background:#0e1b2a;color:#e6eef6;margin:0;padding:32px;}
+.container{max-width:600px;margin:auto;}
+.card{background:rgba(255,255,255,.03);padding:var(--pad);border-radius:12px;margin-top:18px;}
+h1{text-align:center;color:var(--accent);}
+.form-group{margin-bottom:20px;}
+label{display:block;font-size:14px;font-weight:600;margin-bottom:8px;color:#e6eef6;}
+input[type=text],input[type=password],input[type=email]{
+  width:100%;padding:12px;border-radius:8px;border:1px solid #334155;
+  background:#0e1b2a;color:#e6eef6;font-size:14px;box-sizing:border-box;
+}
+input:focus{outline:none;border-color:var(--accent);}
+button{background:var(--accent);border:0;color:#052018;padding:12px 24px;border-radius:10px;
+       font-weight:600;cursor:pointer;width:100%;font-size:16px;margin-top:10px;}
+button:hover{opacity:0.9;}
+.help{font-size:12px;color:var(--muted);margin-top:6px;}
+.warning{background:#dc262620;border-left:4px solid #dc2626;padding:12px;border-radius:6px;margin-bottom:20px;}
+.success{background:#10b98120;border-left:4px solid #10b981;padding:12px;border-radius:6px;margin-bottom:20px;display:none;}
+</style>
+</head><body>
+<div class="container">
+  <h1>🔑 Configuración Inicial</h1>
+  
+  <div class="card">
+    <div class="warning">
+      <strong>⚠️ Configuración Requerida</strong><br>
+      Para usar los bots, primero configurá tus credenciales.
+    </div>
+    
+    <div id="successMsg" class="success">
+      <strong>✅ Configuración guardada</strong><br>
+      Redirigiendo al dashboard...
+    </div>
+    
+    <form id="setupForm">
+      <h3 style="margin-top:0;color:var(--accent);">📧 Credenciales de Gmail</h3>
+      
+      <div class="form-group">
+        <label for="gmail">Correo de Gmail:</label>
+        <input type="email" id="gmail" name="gmail" placeholder="tu-email@gmail.com" required>
+        <div class="help">Tu dirección de Gmail completa</div>
+      </div>
+      
+      <div class="form-group">
+        <label for="gmailPass">Contraseña de Aplicación de Gmail:</label>
+        <input type="text" id="gmailPass" name="gmailPass" placeholder="xxxx-xxxx-xxxx-xxxx" required>
+        <div class="help">
+          <strong>NO</strong> uses tu contraseña normal de Gmail. 
+          <a href="https://myaccount.google.com/apppasswords" target="_blank" style="color:var(--accent);">
+            Crear Contraseña de Aplicación aquí
+          </a>
+        </div>
+      </div>
+      
+      <h3 style="margin-top:30px;color:var(--accent);">🏦 Credenciales de Lohas</h3>
+      
+      <div class="form-group">
+        <label for="userLohas">Usuario de Lohas:</label>
+        <input type="text" id="userLohas" name="userLohas" placeholder="tu_usuario" required>
+        <div class="help">Tu usuario de app.lohas.eco</div>
+      </div>
+      
+      <div class="form-group">
+        <label for="passLohas">Contraseña de Lohas:</label>
+        <input type="password" id="passLohas" name="passLohas" placeholder="••••••••" required>
+        <div class="help">Tu contraseña de app.lohas.eco</div>
+      </div>
+      
+      <button type="submit">💾 Guardar Configuración</button>
+    </form>
+  </div>
+</div>
+
+<script>
+document.getElementById('setupForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const btn = e.target.querySelector('button');
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '⏳ Guardando...';
+  
+  const data = {
+    gmail_user: document.getElementById('gmail').value,
+    gmail_pass: document.getElementById('gmailPass').value,
+    user_lohas: document.getElementById('userLohas').value,
+    pass_lohas: document.getElementById('passLohas').value
+  };
+  
+  try {
+    const response = await fetch('/save_config', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    });
+    
+    if (response.ok) {
+      document.getElementById('successMsg').style.display = 'block';
+      document.querySelector('.warning').style.display = 'none';
+      setTimeout(() => window.location.reload(), 2000);
+    } else {
+      alert('Error al guardar la configuración');
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
+  } catch (error) {
+    alert('Error de conexión: ' + error.message);
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+});
+</script>
+</body></html>
+"""
+
 INDEX_HTML = """<!doctype html>
 <html><head>
 <meta charset="utf-8"/><title>Bot Runner</title>
@@ -270,9 +405,23 @@ def background_monitor(job_id: str, proc: subprocess.Popen):
     fh = FILE_HANDLES.pop(job_id, None)
     if fh: fh.close()
 
+# ─────────────────────────  HELPERS  ────────────────────────────────────────
+def check_credentials_configured():
+    """Verifica si las credenciales están configuradas en .env"""
+    gmail_user = os.getenv('GMAIL_USER', '').strip()
+    gmail_pass = os.getenv('GMAIL_PASS', '').strip()
+    user_lohas = os.getenv('USER_LOHAS', '').strip()
+    pass_lohas = os.getenv('PASS_LOHAS', '').strip()
+    
+    return bool(gmail_user and gmail_pass and user_lohas and pass_lohas)
+
 # ────────────────────────────  ROUTES  ──────────────────────────────────────
 @APP.route("/")
-def index(): return render_template_string(INDEX_HTML)
+def index():
+    # Si no hay credenciales configuradas, redirigir a setup
+    if not check_credentials_configured():
+        return render_template_string(SETUP_HTML)
+    return render_template_string(INDEX_HTML)
 
 @APP.route("/jobs")
 def jobs_list(): return jsonify(JOBS)
@@ -350,6 +499,44 @@ def fetch_accounts():
 def accounts_status(job_id):
     if job_id not in JOBS: return ("not found",404)
     d=JOBS[job_id]; return jsonify({"status":d.get("status"),"accounts":d.get("accounts")})
+
+@APP.route("/save_config", methods=["POST"])
+def save_config():
+    """Guarda las credenciales en el archivo .env"""
+    try:
+        data = request.get_json(silent=True) or {}
+        gmail_user = data.get('gmail_user', '').strip()
+        gmail_pass = data.get('gmail_pass', '').strip()
+        user_lohas = data.get('user_lohas', '').strip()
+        pass_lohas = data.get('pass_lohas', '').strip()
+        
+        # Validar que no estén vacías
+        if not all([gmail_user, gmail_pass, user_lohas, pass_lohas]):
+            return jsonify({"error": "Todos los campos son requeridos"}), 400
+        
+        # Guardar en .env usando python-dotenv
+        env_path = os.path.join(os.getcwd(), '.env')
+        
+        # Escribir el archivo .env
+        with open(env_path, 'w') as f:
+            f.write('# Configuración de credenciales\n')
+            f.write(f'GMAIL_USER={gmail_user}\n')
+            f.write(f'GMAIL_PASS={gmail_pass}\n')
+            f.write(f'USER_LOHAS={user_lohas}\n')
+            f.write(f'PASS_LOHAS={pass_lohas}\n')
+        
+        # Establecer permisos seguros (solo lectura para el propietario)
+        try:
+            os.chmod(env_path, 0o600)
+        except Exception:
+            pass  # En Windows puede fallar, no es crítico
+        
+        # Recargar variables de entorno
+        load_dotenv(override=True)
+        
+        return jsonify({"success": True, "message": "Configuración guardada correctamente"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @APP.route("/stop_all", methods=["POST"])
 def stop_all():
