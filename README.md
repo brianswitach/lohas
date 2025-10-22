@@ -2,15 +2,21 @@
 
 Sistema de automatización para transferencias bancarias y exportación de datos.
 
-## ✅ Paso 0: Crear contraseña de aplicación de Gmail
+## 🔑 Paso 0 (obligatorio): Crear “Contraseña de aplicación” en Gmail
 
-Antes de instalar, generá una contraseña de aplicación en tu cuenta de Gmail (se usará para leer el OTP):
+Antes de usar el bot, necesitás generar una contraseña de aplicación en tu cuenta de Google (para leer el OTP por IMAP):
 
-- Abrí tu cuenta en `https://myaccount.google.com` (estando logueado en Gmail)
-- En la búsqueda de la cuenta, escribí: "contraseñas de aplicación"
-- Entrá en "Contraseñas de aplicación" → "Crear nueva"
-- Elegí un nombre (ej. "lohas-bot") y generá la contraseña
-- Guardala en un lugar seguro: esa clave es la que se usa como `GMAIL_PASS`
+1. Abrí tu navegador e iniciá sesión en tu cuenta de Google/Gmail.
+2. Entrá a tu “Cuenta de Google” (icono de tu perfil → “Gestionar tu Cuenta de Google”).
+3. En el buscador de la cuenta, escribí: “contraseñas de aplicación”.
+4. Entrá a “Contraseñas de aplicación”.
+   - Si te pide, activá la Verificación en dos pasos.
+5. Click en “Crear una nueva contraseña de aplicación”.
+6. Elegí un nombre (por ejemplo: “Lohas Bot”) y confirmá.
+7. Copiá y guardá la contraseña generada (formato XXXX-XXXX-XXXX-XXXX).
+8. Usala como `GMAIL_PASS` en la configuración.
+
+Listo. Con eso el bot puede leer el OTP desde Gmail de forma segura.
 
 ## 📋 Requisitos
 
