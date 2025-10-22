@@ -1131,10 +1131,10 @@ def create_transfer_log_file() -> str:
             f.write("=" * 80 + "\n")
             f.write(f"HISTORIAL DE TRANSFERENCIAS - {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}\n")
             f.write("=" * 80 + "\n\n")
-        _orig_print(f"📄 Archivo de log creado: {log_file}")
+        _orig_print(f"Archivo de log creado: {log_file}")
         return log_file
     except Exception as e:
-        _orig_print(f"❌ Error creando archivo de log: {e}")
+        _orig_print(f"Error creando archivo de log: {e}")
         return ""
 
 
@@ -1153,7 +1153,7 @@ def log_transfer(log_file: str, transfer_number: int, cbu_origen: str, cbu_desti
             f.write(f"  MONTO:          ${monto}\n")
             f.write(f"  Fecha/Hora:     {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}\n")
             f.write("-" * 80 + "\n\n")
-        _orig_print(f"📝 Transfer #{transfer_number} registrada en log")
+        _orig_print(f"Transfer #{transfer_number} registrada en log")
     except Exception as e:
         _orig_print(f"❌ Error escribiendo en log: {e}")
 

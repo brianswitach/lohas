@@ -460,7 +460,7 @@ def run_job():
     fh = open(LOGS_DIR/f"{job_id}.log", "a", buffering=1, encoding="utf-8")
     FILE_HANDLES[job_id]=fh
 
-    env = {**os.environ, "PYTHONUNBUFFERED":"1"}
+    env = {**os.environ, "PYTHONUNBUFFERED":"1", "PYTHONIOENCODING":"utf-8"}
     if job_type=="csv":
         if data.get("date_from") and data.get("date_to"):
             env["DATE_FROM"]=data["date_from"]; env["DATE_TO"]=data["date_to"]
