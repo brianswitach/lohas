@@ -2,19 +2,23 @@
 
 Sistema de automatización para transferencias bancarias y exportación de datos.
 
-## 🔑 Paso 0 (obligatorio): Crear “Contraseña de aplicación” en Gmail
+## 🔑 Paso 0 (obligatorio): Habilitar 2FA y crear “Contraseña de aplicación” en Gmail
 
-Antes de usar el bot, necesitás generar una contraseña de aplicación en tu cuenta de Google (para leer el OTP por IMAP):
+Antes de usar el bot, necesitás tener activa la **Verificación en 2 pasos** y luego generar una **Contraseña de aplicación** en tu cuenta de Google (para leer el OTP por IMAP):
 
-1. Abrí tu navegador e iniciá sesión en tu cuenta de Google/Gmail.
-2. Entrá a tu “Cuenta de Google” (icono de tu perfil → “Gestionar tu Cuenta de Google”).
-3. En el buscador de la cuenta, escribí: “contraseñas de aplicación”.
-4. Entrá a “Contraseñas de aplicación”.
-   - Si te pide, activá la Verificación en dos pasos.
-5. Click en “Crear una nueva contraseña de aplicación”.
-6. Elegí un nombre (por ejemplo: “Lohas Bot”) y confirmá.
-7. Copiá y guardá la contraseña generada (formato XXXX-XXXX-XXXX-XXXX).
-8. Usala como `GMAIL_PASS` en la configuración.
+### A) Activar la Verificación en 2 pasos (si aún no la tenés)
+1. Iniciá sesión en tu cuenta de Google/Gmail.
+2. Entrá a tu **Cuenta de Google** (icono de perfil → "Gestionar tu Cuenta de Google").
+3. En el menú lateral, entrá a **Seguridad y acceso** (o "Seguridad").
+4. En la sección **Cómo acceder a Google**, seleccioná **Verificación en 2 pasos** y activala.
+
+### B) Crear la Contraseña de aplicación
+1. En tu **Cuenta de Google**, buscá "contraseñas de aplicación".
+2. Entrá a **Contraseñas de aplicación**.
+3. Click en **Crear una nueva contraseña de aplicación**.
+4. Elegí un nombre (por ejemplo: "Lohas Bot") y confirmá.
+5. Copiá y guardá la contraseña generada (formato `XXXX-XXXX-XXXX-XXXX`).
+6. Usala como `GMAIL_PASS` en la configuración.
 
 Listo. Con eso el bot puede leer el OTP desde Gmail de forma segura.
 
