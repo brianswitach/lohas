@@ -738,11 +738,11 @@ def login_otp() -> bool:
     
     # Solo procesar fechas si están disponibles
     if date_from and date_to:
-       df_y, df_m, df_d = date_from.split("-")
-       dt_y, dt_m, dt_d = date_to.split("-")
-       print(f"DEBUG: Fechas configuradas: {date_from} a {date_to}")
+        df_y, df_m, df_d = date_from.split("-")
+        dt_y, dt_m, dt_d = date_to.split("-")
+        print(f"DEBUG: Fechas configuradas: {date_from} a {date_to}")
     else:
-       print("DEBUG: No se configuraron fechas - solo proceso OTP")
+        print("DEBUG: No se configuraron fechas - solo proceso OTP")
 
     opts = webdriver.ChromeOptions()
     opts.add_argument("--start-maximized")
@@ -908,8 +908,10 @@ def login_otp() -> bool:
                 print(f"DEBUG: Error estableciendo baseline UID: {e}")
                 since_uid = None
             finally:
-                try: m.logout()
-                except: pass
+                try: 
+                    m.logout()
+                except: 
+                    pass
 
         # 5) Usar el último OTP encontrado directamente
         print("DEBUG: Usando el último OTP encontrado...")
@@ -943,13 +945,11 @@ def login_otp() -> bool:
                 else:
                     print("DEBUG: ❌ No se encontraron emails de lohas")
                 
-            if GMAIL_USER and GMAIL_PASS:
-                m.logout()
-                if not otp_code:
-                    print("DEBUG: ❌ No se obtuvo código OTP")
-                    return False
-            else:
-                print("DEBUG: ❌ Sin credenciales gmail -> no puede operar")
+                if GMAIL_USER and GMAIL_PASS:
+                    m.logout()
+            
+            if not otp_code:
+                print("DEBUG: ❌ No se obtuvo código OTP")
                 return False
         except Exception as e:
             print(f"DEBUG: ❌ Error obteniendo OTP: {e}")
@@ -985,14 +985,14 @@ def login_otp() -> bool:
                 print("DEBUG: ✅ Código OTP pegado con send_keys")
             except Exception as e2:
                 print(f"DEBUG: ❌ Error con send_keys: {e2}")
-            try:
-                # Método 3: Clear y send_keys
-                otp_input.clear()
-                otp_input.send_keys(otp_code)
-                print("DEBUG: ✅ Código OTP pegado con clear + send_keys")
-            except Exception as e3:
-                print(f"DEBUG: ❌ Error con clear + send_keys: {e3}")
-            return False
+                try:
+                    # Método 3: Clear y send_keys
+                    otp_input.clear()
+                    otp_input.send_keys(otp_code)
+                    print("DEBUG: ✅ Código OTP pegado con clear + send_keys")
+                except Exception as e3:
+                    print(f"DEBUG: ❌ Error con clear + send_keys: {e3}")
+                    return False
         
         # Verificar que se pegó correctamente
         try:
@@ -1015,7 +1015,7 @@ def login_otp() -> bool:
                 print(f"DEBUG:   Dígitos obtenidos: '{field_digits}'")
         except Exception as e:
             print(f"DEBUG: ❌ Error verificando valor del campo: {e}")
-                
+        
         # 6.1) Pausa antes de confirmar
         try:
             print("DEBUG: Esperando 4s antes de confirmar/aceptar...")
@@ -1067,284 +1067,284 @@ def login_otp() -> bool:
             time.sleep(4)
         except Exception:
             pass
-        finally:
+        
+        try:
+            print(f"DEBUG: Navegando a grilla: {TRANSFER_URL}")
+            drv.get(TRANSFER_URL)
+            print("DEBUG: Esperando 3s para que cargue la grilla...")
+            time.sleep(3)
+        except Exception as e:
+            print(f"DEBUG: Error navegando a la grilla: {e}")
+        
+        # Si venimos en el segundo flujo con cuenta y fechas, seleccionarlas y completar filtros
+        account_sel = os.getenv("ACCOUNT_SEL")
+        if account_sel and date_from and date_to:
+            print(f"DEBUG: ▶︎ Modo filtros: seleccionar cuenta y fechas — account='{account_sel}', {date_from} → {date_to}")
             try:
-                print(f"DEBUG: Navegando a grilla: {TRANSFER_URL}")
-                drv.get(TRANSFER_URL)
-                print("DEBUG: Esperando 3s para que cargue la grilla...")
-                time.sleep(3)
-            except Exception as e:
-                print(f"DEBUG: Error navegando a la grilla: {e}")
-
-            # Si venimos en el segundo flujo con cuenta y fechas, seleccionarlas y completar filtros
-            account_sel = os.getenv("ACCOUNT_SEL")
-            if account_sel and date_from and date_to:
-                print(f"DEBUG: ▶︎ Modo filtros: seleccionar cuenta y fechas — account='{account_sel}', {date_from} → {date_to}")
-                try:
-                    # Abrir select2
-                    dropdown = drv.find_element(By.CSS_SELECTOR, "span.select2-selection.select2-selection--single")
-                    dropdown.click(); time.sleep(0.8)
-                    # Buscar opción por texto
-                    opts = drv.find_elements(By.CSS_SELECTOR, "li.select2-results__option")
-                    print(f"DEBUG: Opciones en select2: {len(opts)}")
-                    matched = None
-                    for el in opts:
-                        t = (el.text or "").strip()
-                        if not t: continue
-                        # Igualdad exacta o contains
-                        if t == account_sel or account_sel in t:
-                            matched = el; break
-                    if matched:
-                        try:
-                            drv.execute_script("arguments[0].scrollIntoView({block:'center'});", matched)
-                        except Exception:
-                            pass
-                        try:
-                            matched.click()
-                        except Exception:
-                            drv.execute_script("arguments[0].click();", matched)
-                        print("DEBUG: ✅ Cuenta seleccionada en dropdown")
-                    else:
-                        print("DEBUG: ❌ No se encontró la cuenta solicitada en el dropdown")
-
-                    # Completar fechas (6 inputs) en orden izquierda→derecha
-                    try:
-                        df_y, df_m, df_d = date_from.split("-")
-                        dt_y, dt_m, dt_d = date_to.split("-")
-                    except Exception:
-                        print("DEBUG: ❌ Formato de fechas inválido, esperado YYYY-MM-DD")
-                        return False
-
-                    pad2 = lambda s: str(s).zfill(2)
-                    pad4 = lambda s: str(s).zfill(4)
-                    vals = [
-                        (DIA_DESDE,  pad2(df_d)),
-                        (MES_DESDE,  pad2(df_m)),
-                        (ANO_DESDE,  pad4(df_y)),
-                        (DIA_HASTA,  pad2(dt_d)),
-                        (MES_HASTA,  pad2(dt_m)),
-                        (ANO_HASTA,  pad4(dt_y)),
-                    ]
-
-                    for fid, v in vals:
-                        try:
-                            el = locate(drv, By.ID, fid, 8) or drv.find_element(By.ID, fid)
-                        except Exception:
-                            el = None
-                        if not el:
-                            print(f"DEBUG: ❌ No se encontró input fecha id={fid}")
-                            continue
-                        try:
-                            drv.execute_script("arguments[0].scrollIntoView({block:'center'});", el)
-                        except Exception:
-                            pass
-                        try:
-                            el.click(); time.sleep(0.05)
-                        except Exception:
-                            pass
-                        # Limpieza robusta y tipeo
-                        try:
-                            el.send_keys(Keys.CONTROL, 'a'); el.send_keys(Keys.DELETE)
-                        except Exception:
-                            try:
-                                drv.execute_script("arguments[0].value='';", el)
-                            except Exception:
-                                pass
-                        ok_set = False
-                        try:
-                            el.send_keys(v); ok_set = True
-                        except Exception:
-                            try:
-                                drv.execute_script("arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('input',{bubbles:true})); arguments[0].dispatchEvent(new Event('change',{bubbles:true}));", el, v)
-                                ok_set = True
-                            except Exception:
-                                pass
-                        curr = None
-                        try:
-                            curr = el.get_attribute("value")
-                        except Exception:
-                            curr = None
-                        print(f"DEBUG: Fecha id={fid} seteada='{v}' leida='{curr}' ok={ok_set}")
-
-                    print("DEBUG: ✅ Filtros aplicados (cuenta y fechas). Esperando 4s...")
-                    try: time.sleep(4)
-                    except Exception: pass
-
-                    # Click en botón "Búsqueda" y esperar 3s
-                    try:
-                        btn = WebDriverWait(drv, 10).until(EC.element_to_be_clickable((By.ID, "sc_b_pesq_bot")))
-                        try:
-                            btn.click()
-                        except Exception:
-                            drv.execute_script("arguments[0].click();", btn)
-                        print("DEBUG: ✅ Click en botón Búsqueda realizado")
-                    except Exception as e:
-                        print(f"DEBUG: ❌ No se pudo hacer click en botón Búsqueda: {e}")
-
-                    try:
-                        print("DEBUG: Esperando 3s tras Búsqueda para cargar resultados...")
-                        time.sleep(3)
-                    except Exception:
-                        pass
-
-                    # ─── BLOQUE: exportar CSV ──────────────────────────────────
-                    try:
-                        # ➊ Click en el botón «Exportar»
-                        export_btn = WebDriverWait(drv, 10).until(
-                            EC.element_to_be_clickable((By.ID, "sc_btgp_btn_group_1_top"))
-                        )
-                        try:
-                            export_btn.click()
-                        except Exception:
-                            drv.execute_script("arguments[0].click();", export_btn)
-                        print("DEBUG: ✅ Click en botón Exportar realizado")
-                    except Exception as e:
-                        print(f"DEBUG: ❌ No se pudo hacer click en botón Exportar: {e}")
-
-                    # ➋ Esperar 1 s antes de elegir el formato
-                    try: time.sleep(1)
-                    except Exception: pass
-
-                    try:
-                        # ➌ Click en la opción «CSV» del menú desplegable
-                        csv_opt = WebDriverWait(drv, 10).until(
-                            EC.element_to_be_clickable((By.XPATH, "//a[normalize-space()='CSV']"))
-                        )
-                        try:
-                            csv_opt.click()
-                        except Exception:
-                            drv.execute_script("arguments[0].click();", csv_opt)
-                        print("DEBUG: ✅ Click en opción CSV realizado")
-                    except Exception as e:
-                        print(f"DEBUG: ❌ No se pudo hacer click en opción CSV: {e}")
-                    # ────────────────────────────────────────────────────────────────
-
-                    # ── NUEVOS PASOS ROBUSTOS: esperar 2s, click Aceptar (id=bok), esperar 10s, click idBtnDown ──
-                    try:
-                        print("DEBUG: Esperando 2s antes de intentar Aceptar (bok)...")
-                        time.sleep(2)
-                    except Exception:
-                        pass
-
-                    # Intentar click robusto en 'bok' (Aceptar / Confirmar)
-                    ok, msg = click_with_fallback(drv, wait, By.ID, "bok", timeout=12, check_iframe=True, js_last_resort=True)
-                    if ok:
-                        print(f"DEBUG: ✅ Click en botón Aceptar (bok) exitoso - método: {msg}")
-                    else:
-                        # Si falló con ID, intentar por XPath de texto como último intento antes de continuar
-                        try:
-                            print(f"DEBUG: Intentando fallback por texto para Aceptar (bok)...")
-                            ok2, msg2 = click_with_fallback(drv, wait, By.XPATH, "//a[normalize-space()='Aceptar' or contains(.,'Aceptar')]", timeout=8, check_iframe=True, js_last_resort=True)
-                            if ok2:
-                                print(f"DEBUG: ✅ Click en Aceptar por texto exitoso - método: {msg2}")
-                                ok = True
-                            else:
-                                print(f"DEBUG: ❌ Fallback por texto también falló: {msg2}")
-                        except Exception as e:
-                            print(f"DEBUG: ❌ Error en fallback por texto para Aceptar: {e}")
-
-                    if not ok:
-                        print("DEBUG: ❗ Continuamos a intentar descarga de todas formas (si procede)")
-
-                    # Esperar 10s para que el proceso de exportación genere el dialogo/archivo
-                    try:
-                        print("DEBUG: Esperando 10s antes de intentar Descargar (idBtnDown)...")
-                        time.sleep(10)
-                    except Exception:
-                        pass
-
-                    # Intentar click robusto en botón Descargar (idBtnDown)
-                    okd, msgd = click_with_fallback(drv, wait, By.ID, "idBtnDown", timeout=18, check_iframe=True, js_last_resort=False)
-                    if okd:
-                        print(f"DEBUG: ✅ Click en botón Descargar (idBtnDown) exitoso - método: {msgd}")
-                    else:
-                        # fallback por XPath / texto
-                        try:
-                            okd2, msgd2 = click_with_fallback(drv, wait, By.XPATH, "//a[normalize-space()='Descargar' or contains(.,'Descargar')]", timeout=8, check_iframe=True, js_last_resort=False)
-                            if okd2:
-                                print(f"DEBUG: ✅ Click en Descargar por texto exitoso - método: {msgd2}")
-                                okd = True
-                            else:
-                                print(f"DEBUG: ❌ No se pudo clicar Descargar (idBtnDown): {msgd2}")
-                        except Exception as e:
-                            print(f"DEBUG: ❌ Error en fallback por texto para Descargar: {e}")
-
-                    if not okd:
-                        # como último recurso intentar invocar JS downloadClick() si existe
-                        try:
-                            drv.execute_script("if(typeof downloadClick === 'function'){ downloadClick(); }")
-                            print("DEBUG: ✅ Ejecutado downloadClick() por JS como último recurso")
-                            okd = True
-                        except Exception as e:
-                            print(f"DEBUG: ❌ No se pudo invocar downloadClick() por JS: {e}")
-
-                    # Esperar 10s adicionales para que el archivo termine de descargarse
-                    try:
-                        print("DEBUG: Esperando 10s para que termine la descarga del CSV...")
-                        time.sleep(10)
-                    except Exception:
-                        pass
-
-                    # Buscar el CSV más reciente en DOWNLOAD_DIR y reportar ruta
-                    latest = find_latest_file(DOWNLOAD_DIR, pattern_exts=(".csv",))
-                    if latest:
-                        print(f"DEBUG: ✅ Archivo CSV descargado en: {latest}")
-                    else:
-                        print("DEBUG: ❌ No se detectó ningún CSV en la carpeta de descargas")
-
-                    try:
-                        print("DEBUG: Esperando 3s tras exportar/descargar para asegurarnos...")
-                        time.sleep(3)
-                    except Exception:
-                        pass
-
-                    return True
-                except Exception as e:
-                    print(f"DEBUG: ❌ Error aplicando filtros: {e}")
-                    # Continuar con lectura de cuentas como fallback
-
-            # Primer flujo: leer cuentas para mostrarlas en el diálogo
-            print("DEBUG: Buscando dropdown de cuentas...")
-            try:
-                # Intentar abrir el dropdown haciendo click
+                # Abrir select2
                 dropdown = drv.find_element(By.CSS_SELECTOR, "span.select2-selection.select2-selection--single")
-                print(f"DEBUG: Dropdown encontrado: {dropdown}")
-                dropdown.click()
-                time.sleep(1)
-
-                # Leer todas las opciones disponibles
-                options = drv.find_elements(By.CSS_SELECTOR, "li.select2-results__option")
-                accounts = []
-                print(f"DEBUG: Encontradas {len(options)} opciones en el dropdown")
-
-                for i, option in enumerate(options):
+                dropdown.click(); time.sleep(0.8)
+                # Buscar opción por texto
+                opts = drv.find_elements(By.CSS_SELECTOR, "li.select2-results__option")
+                print(f"DEBUG: Opciones en select2: {len(opts)}")
+                matched = None
+                for el in opts:
+                    t = (el.text or "").strip()
+                    if not t: continue
+                    # Igualdad exacta o contains
+                    if t == account_sel or account_sel in t:
+                        matched = el; break
+                if matched:
                     try:
-                        text = option.text
-                        value = option.get_attribute("data-select2-id") or text
-                        if text and text.strip():
-                            accounts.append({"value": value, "text": text.strip()})
-                            print(f"DEBUG: Cuenta {i+1}: {text.strip()}")
-                    except Exception as e:
-                        print(f"DEBUG: Error leyendo opción {i+1}: {e}")
-                        continue
-
-                print(f"DEBUG: Total de cuentas leídas: {len(accounts)}")
-
-                # Guardar las cuentas para retornarlas
-                if accounts:
-                    print("DEBUG: ✅ Cuentas leídas exitosamente")
-                    # Emite una línea marcadora fácil de parsear por Flask
+                        drv.execute_script("arguments[0].scrollIntoView({block:'center'});", matched)
+                    except Exception:
+                        pass
                     try:
-                        payload = json.dumps({"accounts": accounts}, ensure_ascii=True)
-                        _orig_print("ACCOUNTS_JSON:" + payload)
-                    except Exception as _e:
-                        # Fallback: imprime JSON simple (por compatibilidad)
-                        _orig_print(json.dumps({"accounts": accounts}, ensure_ascii=True))
+                        matched.click()
+                    except Exception:
+                        drv.execute_script("arguments[0].click();", matched)
+                    print("DEBUG: ✅ Cuenta seleccionada en dropdown")
                 else:
-                    print("DEBUG: ❌ No se encontraron cuentas en el dropdown")
+                    print("DEBUG: ❌ No se encontró la cuenta solicitada en el dropdown")
 
+                # Completar fechas (6 inputs) en orden izquierda→derecha
+                try:
+                    df_y, df_m, df_d = date_from.split("-")
+                    dt_y, dt_m, dt_d = date_to.split("-")
+                except Exception:
+                    print("DEBUG: ❌ Formato de fechas inválido, esperado YYYY-MM-DD")
+                    return False
+
+                pad2 = lambda s: str(s).zfill(2)
+                pad4 = lambda s: str(s).zfill(4)
+                vals = [
+                    (DIA_DESDE,  pad2(df_d)),
+                    (MES_DESDE,  pad2(df_m)),
+                    (ANO_DESDE,  pad4(df_y)),
+                    (DIA_HASTA,  pad2(dt_d)),
+                    (MES_HASTA,  pad2(dt_m)),
+                    (ANO_HASTA,  pad4(dt_y)),
+                ]
+
+                for fid, v in vals:
+                    try:
+                        el = locate(drv, By.ID, fid, 8) or drv.find_element(By.ID, fid)
+                    except Exception:
+                        el = None
+                    if not el:
+                        print(f"DEBUG: ❌ No se encontró input fecha id={fid}")
+                        continue
+                    try:
+                        drv.execute_script("arguments[0].scrollIntoView({block:'center'});", el)
+                    except Exception:
+                        pass
+                    try:
+                        el.click(); time.sleep(0.05)
+                    except Exception:
+                        pass
+                    # Limpieza robusta y tipeo
+                    try:
+                        el.send_keys(Keys.CONTROL, 'a'); el.send_keys(Keys.DELETE)
+                    except Exception:
+                        try:
+                            drv.execute_script("arguments[0].value='';", el)
+                        except Exception:
+                            pass
+                    ok_set = False
+                    try:
+                        el.send_keys(v); ok_set = True
+                    except Exception:
+                        try:
+                            drv.execute_script("arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('input',{bubbles:true})); arguments[0].dispatchEvent(new Event('change',{bubbles:true}));", el, v)
+                            ok_set = True
+                        except Exception:
+                            pass
+                    curr = None
+                    try:
+                        curr = el.get_attribute("value")
+                    except Exception:
+                        curr = None
+                    print(f"DEBUG: Fecha id={fid} seteada='{v}' leida='{curr}' ok={ok_set}")
+
+                print("DEBUG: ✅ Filtros aplicados (cuenta y fechas). Esperando 4s...")
+                try: time.sleep(4)
+                except Exception: pass
+
+                # Click en botón "Búsqueda" y esperar 3s
+                try:
+                    btn = WebDriverWait(drv, 10).until(EC.element_to_be_clickable((By.ID, "sc_b_pesq_bot")))
+                    try:
+                        btn.click()
+                    except Exception:
+                        drv.execute_script("arguments[0].click();", btn)
+                    print("DEBUG: ✅ Click en botón Búsqueda realizado")
+                except Exception as e:
+                    print(f"DEBUG: ❌ No se pudo hacer click en botón Búsqueda: {e}")
+
+                try:
+                    print("DEBUG: Esperando 3s tras Búsqueda para cargar resultados...")
+                    time.sleep(3)
+                except Exception:
+                    pass
+
+                # ─── BLOQUE: exportar CSV ──────────────────────────────────
+                try:
+                    # ➊ Click en el botón «Exportar»
+                    export_btn = WebDriverWait(drv, 10).until(
+                        EC.element_to_be_clickable((By.ID, "sc_btgp_btn_group_1_top"))
+                    )
+                    try:
+                        export_btn.click()
+                    except Exception:
+                        drv.execute_script("arguments[0].click();", export_btn)
+                    print("DEBUG: ✅ Click en botón Exportar realizado")
+                except Exception as e:
+                    print(f"DEBUG: ❌ No se pudo hacer click en botón Exportar: {e}")
+
+                # ➋ Esperar 1 s antes de elegir el formato
+                try: time.sleep(1)
+                except Exception: pass
+
+                try:
+                    # ➌ Click en la opción «CSV» del menú desplegable
+                    csv_opt = WebDriverWait(drv, 10).until(
+                        EC.element_to_be_clickable((By.XPATH, "//a[normalize-space()='CSV']"))
+                    )
+                    try:
+                        csv_opt.click()
+                    except Exception:
+                        drv.execute_script("arguments[0].click();", csv_opt)
+                    print("DEBUG: ✅ Click en opción CSV realizado")
+                except Exception as e:
+                    print(f"DEBUG: ❌ No se pudo hacer click en opción CSV: {e}")
+                # ────────────────────────────────────────────────────────────────
+
+                # ── NUEVOS PASOS ROBUSTOS: esperar 2s, click Aceptar (id=bok), esperar 10s, click idBtnDown ──
+                try:
+                    print("DEBUG: Esperando 2s antes de intentar Aceptar (bok)...")
+                    time.sleep(2)
+                except Exception:
+                    pass
+
+                # Intentar click robusto en 'bok' (Aceptar / Confirmar)
+                ok, msg = click_with_fallback(drv, wait, By.ID, "bok", timeout=12, check_iframe=True, js_last_resort=True)
+                if ok:
+                    print(f"DEBUG: ✅ Click en botón Aceptar (bok) exitoso - método: {msg}")
+                else:
+                    # Si falló con ID, intentar por XPath de texto como último intento antes de continuar
+                    try:
+                        print(f"DEBUG: Intentando fallback por texto para Aceptar (bok)...")
+                        ok2, msg2 = click_with_fallback(drv, wait, By.XPATH, "//a[normalize-space()='Aceptar' or contains(.,'Aceptar')]", timeout=8, check_iframe=True, js_last_resort=True)
+                        if ok2:
+                            print(f"DEBUG: ✅ Click en Aceptar por texto exitoso - método: {msg2}")
+                            ok = True
+                        else:
+                            print(f"DEBUG: ❌ Fallback por texto también falló: {msg2}")
+                    except Exception as e:
+                        print(f"DEBUG: ❌ Error en fallback por texto para Aceptar: {e}")
+
+                if not ok:
+                    print("DEBUG: ❗ Continuamos a intentar descarga de todas formas (si procede)")
+
+                # Esperar 10s para que el proceso de exportación genere el dialogo/archivo
+                try:
+                    print("DEBUG: Esperando 10s antes de intentar Descargar (idBtnDown)...")
+                    time.sleep(10)
+                except Exception:
+                    pass
+
+                # Intentar click robusto en botón Descargar (idBtnDown)
+                okd, msgd = click_with_fallback(drv, wait, By.ID, "idBtnDown", timeout=18, check_iframe=True, js_last_resort=False)
+                if okd:
+                    print(f"DEBUG: ✅ Click en botón Descargar (idBtnDown) exitoso - método: {msgd}")
+                else:
+                    # fallback por XPath / texto
+                    try:
+                        okd2, msgd2 = click_with_fallback(drv, wait, By.XPATH, "//a[normalize-space()='Descargar' or contains(.,'Descargar')]", timeout=8, check_iframe=True, js_last_resort=False)
+                        if okd2:
+                            print(f"DEBUG: ✅ Click en Descargar por texto exitoso - método: {msgd2}")
+                            okd = True
+                        else:
+                            print(f"DEBUG: ❌ No se pudo clicar Descargar (idBtnDown): {msgd2}")
+                    except Exception as e:
+                        print(f"DEBUG: ❌ Error en fallback por texto para Descargar: {e}")
+
+                if not okd:
+                    # como último recurso intentar invocar JS downloadClick() si existe
+                    try:
+                        drv.execute_script("if(typeof downloadClick === 'function'){ downloadClick(); }")
+                        print("DEBUG: ✅ Ejecutado downloadClick() por JS como último recurso")
+                        okd = True
+                    except Exception as e:
+                        print(f"DEBUG: ❌ No se pudo invocar downloadClick() por JS: {e}")
+
+                # Esperar 10s adicionales para que el archivo termine de descargarse
+                try:
+                    print("DEBUG: Esperando 10s para que termine la descarga del CSV...")
+                    time.sleep(10)
+                except Exception:
+                    pass
+
+                # Buscar el CSV más reciente en DOWNLOAD_DIR y reportar ruta
+                latest = find_latest_file(DOWNLOAD_DIR, pattern_exts=(".csv",))
+                if latest:
+                    print(f"DEBUG: ✅ Archivo CSV descargado en: {latest}")
+                else:
+                    print("DEBUG: ❌ No se detectó ningún CSV en la carpeta de descargas")
+
+                try:
+                    print("DEBUG: Esperando 3s tras exportar/descargar para asegurarnos...")
+                    time.sleep(3)
+                except Exception:
+                    pass
+
+                return True
             except Exception as e:
-                print(f"DEBUG: ❌ Error leyendo dropdown de cuentas: {e}")
+                print(f"DEBUG: ❌ Error aplicando filtros: {e}")
+                # Continuar con lectura de cuentas como fallback
+        
+        # Primer flujo: leer cuentas para mostrarlas en el diálogo
+        print("DEBUG: Buscando dropdown de cuentas...")
+        try:
+            # Intentar abrir el dropdown haciendo click
+            dropdown = drv.find_element(By.CSS_SELECTOR, "span.select2-selection.select2-selection--single")
+            print(f"DEBUG: Dropdown encontrado: {dropdown}")
+            dropdown.click()
+            time.sleep(1)
+
+            # Leer todas las opciones disponibles
+            options = drv.find_elements(By.CSS_SELECTOR, "li.select2-results__option")
+            accounts = []
+            print(f"DEBUG: Encontradas {len(options)} opciones en el dropdown")
+
+            for i, option in enumerate(options):
+                try:
+                    text = option.text
+                    value = option.get_attribute("data-select2-id") or text
+                    if text and text.strip():
+                        accounts.append({"value": value, "text": text.strip()})
+                        print(f"DEBUG: Cuenta {i+1}: {text.strip()}")
+                except Exception as e:
+                    print(f"DEBUG: Error leyendo opción {i+1}: {e}")
+                    continue
+
+            print(f"DEBUG: Total de cuentas leídas: {len(accounts)}")
+
+            # Guardar las cuentas para retornarlas
+            if accounts:
+                print("DEBUG: ✅ Cuentas leídas exitosamente")
+                # Emite una línea marcadora fácil de parsear por Flask
+                try:
+                    payload = json.dumps({"accounts": accounts}, ensure_ascii=True)
+                    _orig_print("ACCOUNTS_JSON:" + payload)
+                except Exception as _e:
+                    # Fallback: imprime JSON simple (por compatibilidad)
+                    _orig_print(json.dumps({"accounts": accounts}, ensure_ascii=True))
+            else:
+                print("DEBUG: ❌ No se encontraron cuentas en el dropdown")
+
+        except Exception as e:
+            print(f"DEBUG: ❌ Error leyendo dropdown de cuentas: {e}")
 
         print("DEBUG: Retornando True - flujo post-OTP completado")
         return True

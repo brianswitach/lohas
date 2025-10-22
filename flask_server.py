@@ -567,16 +567,21 @@ def save_config():
 def stop_all():
     """Mata absolutamente todos los procesos relacionados con bots y Chrome"""
     try:
-        # Matar todos los procesos de Python que ejecuten bots
-        subprocess.run(["pkill", "-9", "-f", "python.*bot"], capture_output=True)
+        import platform
+        is_windows = platform.system() == "Windows"
         
-        # Matar todos los procesos de Chrome
-        subprocess.run(["killall", "-9", "Google Chrome"], capture_output=True)
-        subprocess.run(["killall", "-9", "Chrome"], capture_output=True)
-        
-        # Matar todos los procesos de chromedriver
-        subprocess.run(["killall", "-9", "chromedriver"], capture_output=True)
-        subprocess.run(["pkill", "-9", "-f", "chromedriver"], capture_output=True)
+        if is_windows:
+            # En Windows usar taskkill
+            subprocess.run(["taskkill", "/F", "/IM", "python.exe", "/FI", "WINDOWTITLE eq bot*"], capture_output=True)
+            subprocess.run(["taskkill", "/F", "/IM", "chrome.exe"], capture_output=True)
+            subprocess.run(["taskkill", "/F", "/IM", "chromedriver.exe"], capture_output=True)
+        else:
+            # En Unix/Mac usar pkill/killall
+            subprocess.run(["pkill", "-9", "-f", "python.*bot"], capture_output=True)
+            subprocess.run(["killall", "-9", "Google Chrome"], capture_output=True)
+            subprocess.run(["killall", "-9", "Chrome"], capture_output=True)
+            subprocess.run(["killall", "-9", "chromedriver"], capture_output=True)
+            subprocess.run(["pkill", "-9", "-f", "chromedriver"], capture_output=True)
         
         # Limpiar todos los jobs
         for job_id in list(JOBS.keys()):
