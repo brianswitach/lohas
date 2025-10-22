@@ -2,6 +2,16 @@
 
 Sistema de automatización para transferencias bancarias y exportación de datos.
 
+## ✅ Paso 0: Crear contraseña de aplicación de Gmail
+
+Antes de instalar, generá una contraseña de aplicación en tu cuenta de Gmail (se usará para leer el OTP):
+
+- Abrí tu cuenta en `https://myaccount.google.com` (estando logueado en Gmail)
+- En la búsqueda de la cuenta, escribí: "contraseñas de aplicación"
+- Entrá en "Contraseñas de aplicación" → "Crear nueva"
+- Elegí un nombre (ej. "lohas-bot") y generá la contraseña
+- Guardala en un lugar seguro: esa clave es la que se usa como `GMAIL_PASS`
+
 ## 📋 Requisitos
 
 - Python 3.9 o superior
