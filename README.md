@@ -156,6 +156,35 @@ set PORT=5001 && python flask_server.py
 
 Abre tu navegador en: **http://localhost:5001**
 
+### 🔑 Primera Vez: Configuración Inicial
+
+**LA PRIMERA VEZ** que accedas a la interfaz web, aparecerá automáticamente una **pantalla de configuración inicial**:
+
+![Pantalla de Configuración](docs/config-screen.png)
+
+**Deberás completar los siguientes campos:**
+
+1. **📧 Correo de Gmail**: Tu dirección de Gmail completa (ej: `tu-email@gmail.com`)
+2. **🔑 Contraseña de Aplicación de Gmail**: La contraseña de 16 caracteres que creaste en el **Paso 0** (formato: `xxxx-xxxx-xxxx-xxxx`)
+3. **👤 Usuario de Lohas**: Tu usuario de `app.lohas.eco`
+4. **🔒 Contraseña de Lohas**: Tu contraseña de `app.lohas.eco`
+
+**Pasos:**
+1. Completa los 4 campos
+2. Click en **"💾 Guardar Configuración"**
+3. La página se recargará automáticamente
+4. Aparecerá el **dashboard principal** con los botones de bots
+
+**⚠️ Importante:**
+- Esta configuración **solo aparece la primera vez**
+- Las credenciales se guardan de forma segura en un archivo `.env` local
+- El archivo `.env` **NUNCA se sube a GitHub** (está protegido)
+- Las próximas veces que levantes el servidor, irás **directo al dashboard**
+
+**¿Necesitás cambiar las credenciales?**
+- Opción 1: Borra el archivo `.env` y reinicia el servidor
+- Opción 2: Edita el archivo `.env` manualmente con un editor de texto
+
 ## 🤖 Bots Disponibles
 
 ### 1. Bot Transferencias
