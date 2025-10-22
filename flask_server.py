@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-flask_server.py – Lanza “Bot Transferencias” (sin fechas) o “Bot CSV” (con
-diálogo de fechas).  Las fechas elegidas se envían al bot CSV mediante
-DATE_FROM / DATE_TO.  Incluye visor de logs, seguimiento de jobs y un
-“mini-scan” de cuentas (SCAN_ONLY).
+flask_server.py - Lanza "Bot Transferencias" (sin fechas) o "Bot CSV" (con
+dialogo de fechas). Las fechas elegidas se envian al bot CSV mediante
+DATE_FROM / DATE_TO. Incluye visor de logs, seguimiento de jobs y un
+"mini-scan" de cuentas (SCAN_ONLY).
 """
 
 import os, sys, uuid, time, subprocess, threading, json
@@ -18,12 +18,12 @@ APP = Flask(__name__)
 # Cargar variables de entorno desde .env
 load_dotenv()
 
-# Verificar si existe .env, si no, crearlo vacío
+# Verificar si existe .env, si no, crearlo vacio
 ENV_FILE = find_dotenv()
 if not ENV_FILE:
     ENV_FILE = os.path.join(os.getcwd(), '.env')
     with open(ENV_FILE, 'w') as f:
-        f.write('# Configuración de credenciales\n')
+        f.write('# Configuracion de credenciales\n')
         f.write('GMAIL_USER=\n')
         f.write('GMAIL_PASS=\n')
         f.write('USER_LOHAS=\n')
@@ -36,7 +36,7 @@ FILE_HANDLES: dict[str, object] = {}
 # ───────────────────────────────  HTML UI  ───────────────────────────────────
 SETUP_HTML = """<!doctype html>
 <html><head>
-<meta charset="utf-8"/><title>Configuración Inicial - Lohas Bot</title>
+<meta charset="utf-8"/><title>Configuracion Inicial - Lohas Bot</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 :root{--bg:#0f1724;--card:#0b1220;--accent:#10b981;--muted:#9aa5b1;--pad:18px;}
@@ -60,16 +60,16 @@ button:hover{opacity:0.9;}
 </style>
 </head><body>
 <div class="container">
-  <h1>🔑 Configuración Inicial</h1>
+  <h1>🔑 Configuracion Inicial</h1>
   
   <div class="card">
     <div class="warning">
-      <strong>⚠️ Configuración Requerida</strong><br>
-      Para usar los bots, primero configurá tus credenciales.
+      <strong>⚠️ Configuracion Requerida</strong><br>
+      Para usar los bots, primero configura tus credenciales.
     </div>
     
     <div id="successMsg" class="success">
-      <strong>✅ Configuración guardada</strong><br>
+      <strong>✅ Configuracion guardada</strong><br>
       Redirigiendo al dashboard...
     </div>
     
@@ -79,16 +79,16 @@ button:hover{opacity:0.9;}
       <div class="form-group">
         <label for="gmail">Correo de Gmail:</label>
         <input type="email" id="gmail" name="gmail" placeholder="tu-email@gmail.com" required>
-        <div class="help">Tu dirección de Gmail completa</div>
+        <div class="help">Tu direccion de Gmail completa</div>
       </div>
       
       <div class="form-group">
-        <label for="gmailPass">Contraseña de Aplicación de Gmail:</label>
+        <label for="gmailPass">Contrasena de Aplicacion de Gmail:</label>
         <input type="text" id="gmailPass" name="gmailPass" placeholder="xxxx-xxxx-xxxx-xxxx" required>
         <div class="help">
-          <strong>NO</strong> uses tu contraseña normal de Gmail. 
+          <strong>NO</strong> uses tu contrasena normal de Gmail. 
           <a href="https://myaccount.google.com/apppasswords" target="_blank" style="color:var(--accent);">
-            Crear Contraseña de Aplicación aquí
+            Crear Contrasena de Aplicacion aqui
           </a>
         </div>
       </div>
@@ -102,12 +102,12 @@ button:hover{opacity:0.9;}
       </div>
       
       <div class="form-group">
-        <label for="passLohas">Contraseña de Lohas:</label>
+        <label for="passLohas">Contrasena de Lohas:</label>
         <input type="password" id="passLohas" name="passLohas" placeholder="••••••••" required>
-        <div class="help">Tu contraseña de app.lohas.eco</div>
+        <div class="help">Tu contrasena de app.lohas.eco</div>
       </div>
       
-      <button type="submit">💾 Guardar Configuración</button>
+      <button type="submit">💾 Guardar Configuracion</button>
     </form>
   </div>
 </div>
@@ -140,12 +140,12 @@ document.getElementById('setupForm').addEventListener('submit', async (e) => {
       document.querySelector('.warning').style.display = 'none';
       setTimeout(() => window.location.reload(), 2000);
     } else {
-      alert('Error al guardar la configuración');
+      alert('Error al guardar la configuracion');
       btn.disabled = false;
       btn.textContent = originalText;
     }
   } catch (error) {
-    alert('Error de conexión: ' + error.message);
+    alert('Error de conexion: ' + error.message);
     btn.disabled = false;
     btn.textContent = originalText;
   }
@@ -197,7 +197,7 @@ input[type=number]{width:60px;padding:6px;border-radius:6px;border:1px solid #33
   </div>
 </div>
 
-<!-- diálogo fechas (solo para Bot CSV) -->
+<!-- dialogo fechas (solo para Bot CSV) -->
 <dialog id="dateDlg">
   <form method="dialog">
     <h3>Seleccionar rango de fechas</h3>
@@ -248,7 +248,7 @@ async function startJob(type, payload={}, onComplete=null){
     try{
       const errorData = await r.json();
       if(errorData.error === 'credentials_missing'){
-        alert('⚠️ Faltan credenciales\\n\\n' + errorData.message + '\\n\\nRedirigiendo a configuración...');
+        alert('⚠️ Faltan credenciales\\n\\n' + errorData.message + '\\n\\nRedirigiendo a configuracion...');
         window.location.href = '/setup';
         return;
       }
@@ -289,7 +289,7 @@ function openDateDialog(accounts=null, cb=null){
     sel.disabled=false; save.disabled=false;
     dlg.showModal();
   } else {
-    // Método antiguo: fetch de cuentas
+    // Metodo antiguo: fetch de cuentas
     sel.innerHTML='<option>Cargando cuentas...</option>'; sel.disabled=true; save.disabled=true; dlg.showModal();
     fetch('/fetch_accounts',{method:'POST'}).then(r=>r.json()).then(js=>{
       const jid=js.job_id;
@@ -329,13 +329,13 @@ document.getElementById('runTransferBtn').onclick=()=>{
   startJob('transfer');
 };
 
-// Bot CSV: ejecutar bot, parsear cuentas del log, y abrir diálogo
+// Bot CSV: ejecutar bot, parsear cuentas del log, y abrir dialogo
 document.getElementById('runCsvBtn').onclick = ()=>{
   console.log('Bot CSV clicked');
   startJob('csv', {}, (logText)=>{
     console.log('Bot CSV completado, parseando log...');
     console.log('Longitud del log:', logText.length);
-    // 1) Intento de extracción ultra-sencillo: última línea que empieza con {"accounts":
+    // 1) Intento de extraccion ultra-sencillo: ultima linea que empieza con {"accounts":
     let accounts = [];
     try{
       const lines = logText.split('\\n');
@@ -347,35 +347,35 @@ document.getElementById('runCsvBtn').onclick = ()=>{
           break;
         }
       }
-    }catch(e){ console.warn('Parse simple falló:', e); }
+    }catch(e){ console.warn('Parse simple fallo:', e); }
 
-    // 2) Fallback aún más simple: buscar "Cuenta 1:" y "Cuenta 2:" en el log y construir variables
+    // 2) Fallback aun mas simple: buscar "Cuenta 1:" y "Cuenta 2:" en el log y construir variables
     if(accounts.length===0){
       try{
         const accs=[]; 
-        const reLine=/^DEBUG:\s*Cuenta\s*(\d+)\s*:\s*(.+)$/gm; 
+        const reLine=/^DEBUG:\\s*Cuenta\\s*(\\d+)\\s*:\\s*(.+)$/gm; 
         let m; 
         while((m=reLine.exec(logText))!==null){ accs[parseInt(m[1],10)-1] = {value:m[2].trim(), text:m[2].trim()}; }
         if(accs.filter(Boolean).length>0){ accounts = accs.filter(Boolean); }
-      }catch(e){ console.warn('Fallback por líneas DEBUG falló:', e); }
+      }catch(e){ console.warn('Fallback por lineas DEBUG fallo:', e); }
     }
     
     console.log('Cuentas encontradas:', accounts.length);
     
-    // Abrir diálogo con las cuentas
+    // Abrir dialogo con las cuentas
     if(accounts.length > 0){
-      console.log('Abriendo diálogo con cuentas:', accounts);
+      console.log('Abriendo dialogo con cuentas:', accounts);
       // Guardar en variables globales cuenta1, cuenta2, cuenta3
       try{
         window.cuenta1 = accounts[0] || undefined;
         window.cuenta2 = accounts[1] || undefined;
         window.cuenta3 = accounts[2] || undefined;
       }catch(e){ console.warn('No se pudieron setear variables cuenta1/2/3:', e); }
-      // Usar las variables para poblar el diálogo
+      // Usar las variables para poblar el dialogo
       openDateDialog(accountsFromVars(), (payload)=>startJob('csv', payload));
     } else {
       console.error('No se encontraron cuentas en el log');
-      // Intentar abrir con variables existentes (si quedaron de una ejecución previa)
+      // Intentar abrir con variables existentes (si quedaron de una ejecucion previa)
       const fallback = accountsFromVars();
       if(fallback.length>0){
         console.log('Usando variables existentes cuenta1/2/3:', fallback);
@@ -389,8 +389,8 @@ document.getElementById('runCsvBtn').onclick = ()=>{
 
 document.getElementById('stopAllBtn').onclick = async ()=>{
   console.log('STOP ALL clicked');
-  if(confirm('¿Estás seguro de que quieres detener TODOS los procesos? Esto matará todos los bots y ventanas de Chrome.')){
-    console.log('Usuario confirmó STOP ALL');
+  if(confirm('Estas seguro de que quieres detener TODOS los procesos? Esto matara todos los bots y ventanas de Chrome.')){
+    console.log('Usuario confirmo STOP ALL');
     const r=await fetch('/stop_all',{method:'POST'});
     if(r.ok){
       console.log('STOP ALL exitoso');
@@ -418,7 +418,7 @@ def background_monitor(job_id: str, proc: subprocess.Popen):
 
 # ─────────────────────────  HELPERS  ────────────────────────────────────────
 def check_credentials_configured():
-    """Verifica si las credenciales están configuradas en .env"""
+    """Verifica si las credenciales estan configuradas en .env"""
     gmail_user = os.getenv('GMAIL_USER', '').strip()
     gmail_pass = os.getenv('GMAIL_PASS', '').strip()
     user_lohas = os.getenv('USER_LOHAS', '').strip()
@@ -436,7 +436,7 @@ def index():
 
 @APP.route("/setup")
 def setup():
-    """Ruta para acceder manualmente a la configuración"""
+    """Ruta para acceder manualmente a la configuracion"""
     return render_template_string(SETUP_HTML)
 
 @APP.route("/jobs")
@@ -447,11 +447,11 @@ def run_job():
     # Validar que existan credenciales antes de ejecutar
     if not check_credentials_configured():
         return jsonify({"error": "credentials_missing", 
-                       "message": "Faltan credenciales. Por favor, configurá tus credenciales primero."}), 400
+                       "message": "Faltan credenciales. Por favor, configura tus credenciales primero."}), 400
     
     data = request.get_json(silent=True) or {}
     job_type = data.get("type", "transfer")
-    if job_type not in ("transfer", "csv"): return ("type inválido", 400)
+    if job_type not in ("transfer", "csv"): return ("type invalido", 400)
 
     script = "bot.py" if job_type=="transfer" else "bot_csv.py"
     if not Path(script).exists(): return (f"{script} no encontrado", 500)
@@ -517,7 +517,7 @@ def fetch_accounts():
     # Validar que existan credenciales antes de ejecutar
     if not check_credentials_configured():
         return jsonify({"error": "credentials_missing", 
-                       "message": "Faltan credenciales. Por favor, configurá tus credenciales primero."}), 400
+                       "message": "Faltan credenciales. Por favor, configura tus credenciales primero."}), 400
     job_id = start_account_scan_job(); return jsonify({"job_id": job_id})
 
 @APP.route("/accounts/<job_id>")
@@ -535,7 +535,7 @@ def save_config():
         user_lohas = data.get('user_lohas', '').strip()
         pass_lohas = data.get('pass_lohas', '').strip()
         
-        # Validar que no estén vacías
+        # Validar que no esten vacias
         if not all([gmail_user, gmail_pass, user_lohas, pass_lohas]):
             return jsonify({"error": "Todos los campos son requeridos"}), 400
         
@@ -544,7 +544,7 @@ def save_config():
         
         # Escribir el archivo .env
         with open(env_path, 'w') as f:
-            f.write('# Configuración de credenciales\n')
+            f.write('# Configuracion de credenciales\n')
             f.write(f'GMAIL_USER={gmail_user}\n')
             f.write(f'GMAIL_PASS={gmail_pass}\n')
             f.write(f'USER_LOHAS={user_lohas}\n')
@@ -554,12 +554,12 @@ def save_config():
         try:
             os.chmod(env_path, 0o600)
         except Exception:
-            pass  # En Windows puede fallar, no es crítico
+            pass  # En Windows puede fallar, no es critico
         
         # Recargar variables de entorno
         load_dotenv(override=True)
         
-        return jsonify({"success": True, "message": "Configuración guardada correctamente"})
+        return jsonify({"success": True, "message": "Configuracion guardada correctamente"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
