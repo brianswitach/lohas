@@ -1663,9 +1663,8 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
         transfer_code = ""
         try:
             if GMAIL_USER and GMAIL_PASS:
-                # Esperas previas solicitadas
-                time.sleep(3)
-                time.sleep(3)
+                # Espera breve antes de buscar el mail del 2do token
+                time.sleep(1)
 
                 # Intentar UNA vez obtener el código de transferencia (sin reenvíos)
                 try:
@@ -1683,28 +1682,14 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
             token_el = locate_element_across_frames(driver, By.ID, TOKEN_FIELD_ID, timeout=75)
             if token_el:
                 try:
-                    # clic izquierdo en el input, espera 2s, como pediste
+                    # Click en el input y pegar inmediatamente el código
                     try:
                         token_el.click()
                     except Exception:
                         safe_click_element(driver, token_el)
-                    time.sleep(2)
-                    
-                    # Timeout de 1 minuto 15 segundos para pegar el token
-                    start_time = time.time()
-                    token_pasted = False
-                    
-                    while time.time() - start_time < 75:  # 75 segundos = 1 minuto 15 segundos
-                        if transfer_code:  # Si ya tenemos el código, pegarlo
-                            set_input_value(driver, token_el, transfer_code)
-                            token_pasted = True
-                            break
-                        time.sleep(1)  # Esperar 1 segundo y verificar de nuevo
-                    
-                    if not token_pasted:
-                        return False  # Timeout: no se pudo pegar el token en 75 segundos
-                    
-                    time.sleep(3)
+                    set_input_value(driver, token_el, transfer_code)
+                    # Esperar 1s y continuar con confirmar
+                    time.sleep(1)
                 except Exception:
                     return (False, cbu_origen_selected)
             else:
@@ -1718,8 +1703,8 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
             if conf_btn:
                 ok_conf = safe_click_element(driver, conf_btn)
                 if ok_conf:
-                    # esperar efectos
-                    time.sleep(10)
+                    # continuar sin espera larga
+                    time.sleep(0)
                     success = True
                 else:
                     success = False
