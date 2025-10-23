@@ -1447,10 +1447,26 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
         if ok_confirm:
             time.sleep(3)
             try:
-                driver.get(TRANSFER_URL)
+                # Click en el menú "Transferencias" y validar redirección
+                menu_link = locate_element_across_frames(
+                    driver,
+                    By.XPATH,
+                    "//a[(contains(@href,'form_transferencias') or @tab-title='Transferencias' or .//span[contains(normalize-space(),'Transferencias')])]",
+                    timeout=10,
+                )
+                if menu_link:
+                    safe_click_element(driver, menu_link)
+                time.sleep(2)
+                # Si no estamos en la URL de transferencias, ir directamente
+                if "form_transferencias" not in driver.current_url:
+                    driver.get(TRANSFER_URL)
                 time.sleep(3)
             except Exception:
-                pass
+                try:
+                    driver.get(TRANSFER_URL)
+                    time.sleep(3)
+                except Exception:
+                    pass
 
             # --- PARTE 1: Verificar saldo de cuentas origen y seleccionar una con saldo suficiente ---
             try:
