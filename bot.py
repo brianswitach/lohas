@@ -1289,24 +1289,29 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
         ChromeService = None
 
     try:
-        if ChromeService is not None:
-            service = ChromeService(ChromeDriverManager().install())
-            driver = webdriver.Chrome(service=service, options=options)
-        else:
-            # Compat con Selenium 3: usar constructor simple sin executable_path
-            driver = webdriver.Chrome(options=options)
-    except Exception as e:
-        print(f"ERROR_DEBUG:ChromeDriverManager falló: {str(e)}")
-        # Fallback a chromedriver en PATH usando Service si es posible
+        # Preferir Selenium Manager (Selenium 4.6+) para resolver el driver automáticamente
+        driver = webdriver.Chrome(options=options)
+    except Exception as e_first:
+        print(f"ERROR_DEBUG:Selenium Manager no pudo crear driver: {str(e_first)}")
+        # Fallback 1: webdriver-manager descarga y arma el Service con la ruta del exe
         try:
             if ChromeService is not None:
-                service = ChromeService()
+                service = ChromeService(ChromeDriverManager().install())
                 driver = webdriver.Chrome(service=service, options=options)
             else:
                 driver = webdriver.Chrome(options=options)
-        except Exception as e2:
-            print(f"ERROR_DEBUG:Fallo creando driver con fallback: {e2}")
-            raise
+        except Exception as e:
+            print(f"ERROR_DEBUG:ChromeDriverManager falló: {str(e)}")
+            # Fallback 2: chromedriver en PATH con Service vacío
+            try:
+                if ChromeService is not None:
+                    service = ChromeService()
+                    driver = webdriver.Chrome(service=service, options=options)
+                else:
+                    driver = webdriver.Chrome(options=options)
+            except Exception as e2:
+                print(f"ERROR_DEBUG:Fallo creando driver con fallback: {e2}")
+                raise
     
     # Set proper timeouts to prevent hanging
     driver.set_page_load_timeout(60)
