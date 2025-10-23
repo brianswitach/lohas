@@ -1471,8 +1471,8 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
 
             # --- PARTE 1: Verificar saldo de cuentas origen y seleccionar una con saldo suficiente ---
             try:
-                # Esperar 2 segundos antes de buscar el select de cuentas
-                time.sleep(2)
+                # Esperar 3 segundos antes de buscar el select de cuentas
+                time.sleep(3)
                 # Buscar el select de cuentas origen
                 print("ERROR_DEBUG:Buscando select de cuentas origen...")
                 select_origen = locate_element_across_frames(driver, By.ID, "id_sc_field_idcuenta", timeout=15)
@@ -1614,18 +1614,8 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
                             print(f"ERROR_DEBUG:CBU destino pegado (JS): {cbu_destino}")
                         except Exception:
                             pass
-                # primer Próximo: buscar botón por texto "Proximo/Próximo" y presionarlo
-                prox_el = locate_element_across_frames(
-                    driver,
-                    By.XPATH,
-                    "//button[contains(normalize-space(.),'Próximo') or contains(normalize-space(.),'Proximo')] | "
-                    "//input[( @type='button' or @type='submit') and (contains(@value,'Próximo') or contains(@value,'Proximo'))] | "
-                    "//a[contains(normalize-space(.),'Próximo') or contains(normalize-space(.),'Proximo')]",
-                    timeout=12,
-                )
-                if not prox_el:
-                    # Fallback al ID conocido
-                    prox_el = locate_element_across_frames(driver, By.ID, PRIMERO_BTN_ID, timeout=4)
+                # primer Próximo
+                prox_el = locate_element_across_frames(driver, By.ID, PRIMERO_BTN_ID, timeout=12)
                 if prox_el:
                     safe_click_element(driver, prox_el)
                 time.sleep(5)
