@@ -1471,8 +1471,8 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
 
             # --- PARTE 1: Verificar saldo de cuentas origen y seleccionar una con saldo suficiente ---
             try:
-                # Esperar 3 segundos antes de buscar el select de cuentas
-                time.sleep(3)
+                # Al entrar a la página de transferencias: esperar 2 segundos
+                time.sleep(2)
                 # Buscar el select de cuentas origen
                 print("ERROR_DEBUG:Buscando select de cuentas origen...")
                 select_origen = locate_element_across_frames(driver, By.ID, "id_sc_field_idcuenta", timeout=15)
@@ -1480,6 +1480,15 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
                 if not select_origen:
                     print("ERROR_DEBUG:No se encontró el select de cuentas origen")
                     return (False, cbu_origen_selected)
+                # Click en el select y esperar 1.5s antes de operar
+                try:
+                    safe_click_element(driver, select_origen)
+                except Exception:
+                    try:
+                        driver.execute_script("arguments[0].click();", select_origen)
+                    except Exception:
+                        pass
+                time.sleep(1.5)
                 
                 # Obtener todas las opciones del select
                 try:
@@ -1524,7 +1533,7 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
                         # Seleccionar esta opción
                         try:
                             driver.execute_script("arguments[0].selected = true; arguments[0].dispatchEvent(new Event('change', {bubbles: true}));", option)
-                            time.sleep(1)  # Esperar a que se actualice el saldo
+                            time.sleep(1.5)  # Esperar 1.5s tras elegir opción
                         except Exception as e:
                             print(f"ERROR_DEBUG:Error seleccionando opción: {e}")
                             continue
@@ -1605,6 +1614,8 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
                             driver.execute_script("arguments[0].value='';", cuenta_el)
                         except Exception:
                             pass
+                    # Esperar 1.5s antes de pegar el CBU destino
+                    time.sleep(1.5)
                     try:
                         cuenta_el.send_keys(cbu_destino)
                         print(f"ERROR_DEBUG:CBU destino pegado: {cbu_destino}")
@@ -1614,6 +1625,8 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
                             print(f"ERROR_DEBUG:CBU destino pegado (JS): {cbu_destino}")
                         except Exception:
                             pass
+                    # Esperar 1.5s tras pegar el CBU destino
+                    time.sleep(1.5)
                 # primer Próximo
                 prox_el = locate_element_across_frames(driver, By.ID, PRIMERO_BTN_ID, timeout=12)
                 if prox_el:
