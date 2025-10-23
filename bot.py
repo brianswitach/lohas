@@ -1452,25 +1452,25 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
         if ok_confirm:
             time.sleep(3)
             try:
-                # Esperar 2s
+                # Click en el menú "Transferencias" dentro de ul#nav_list (último wrapper)
+                xpath_menu = (
+                    "//ul[@id='nav_list']//li[contains(@class,'wrapper')][last()]//a["
+                    "contains(@href,'form_transferencias') or @tab-title='Transferencias' or .//span[contains(normalize-space(),'Transferencias')]"
+                    "]"
+                )
+                menu_link = locate_element_across_frames(driver, By.XPATH, xpath_menu, timeout=12)
+                if not menu_link:
+                    # Fallback: buscar cualquier enlace de Transferencias visible
+                    menu_link = locate_element_across_frames(
+                        driver,
+                        By.XPATH,
+                        "//a[contains(@href,'form_transferencias') or .//span[contains(normalize-space(),'Transferencias')] or @tab-title='Transferencias']",
+                        timeout=8,
+                    )
+                if menu_link:
+                    safe_click_element(driver, menu_link)
+                # Esperar 2s y continuar
                 time.sleep(2)
-                # Doble click izquierdo en el centro de la pantalla
-                try:
-                    body_el = driver.find_element(By.TAG_NAME, "body")
-                    try:
-                        ActionChains(driver).double_click(body_el).perform()
-                    except Exception:
-                        # Fallback: mover al centro del body y doble click
-                        w = body_el.size.get('width', 0)
-                        h = body_el.size.get('height', 0)
-                        ActionChains(driver).move_to_element_with_offset(body_el, max(1, w//2), max(1, h//2)).double_click().perform()
-                except Exception:
-                    pass
-                # Esperar 1s adicional
-                time.sleep(1)
-                # Navegar directamente a TRANSFER_URL
-                driver.get(TRANSFER_URL)
-                time.sleep(3)
             except Exception:
                 pass
 
