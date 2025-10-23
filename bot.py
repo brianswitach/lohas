@@ -1470,6 +1470,8 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
 
             # --- PARTE 1: Verificar saldo de cuentas origen y seleccionar una con saldo suficiente ---
             try:
+                # Esperar 2 segundos antes de buscar el select de cuentas
+                time.sleep(2)
                 # Buscar el select de cuentas origen
                 print("ERROR_DEBUG:Buscando select de cuentas origen...")
                 select_origen = locate_element_across_frames(driver, By.ID, "id_sc_field_idcuenta", timeout=15)
