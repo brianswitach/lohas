@@ -19,6 +19,7 @@ import time
 import imaplib
 import email
 import email.header
+import threading
 from email.utils import parsedate_to_datetime
 from typing import List, Optional, Tuple, Callable, Dict, Any
 from datetime import datetime
@@ -66,10 +67,13 @@ def _minimal_print(*args, sep=' ', end='\n', file=None, flush=False):
             _orig_print(f"Fallida la Transferencia #{n}", end=end, file=file, flush=flush)
         except Exception:
             pass
-    elif msg.startswith("ERROR_DEBUG:"):
+    elif msg.startswith("ERROR_DEBUG:") or msg.startswith("DEBUG:"):
         try:
-            debug_msg = msg.split(":", 1)[1]
-            _orig_print(f"DEBUG: {debug_msg}", end=end, file=file, flush=flush)
+            if msg.startswith("ERROR_DEBUG:"):
+                debug_msg = msg.split(":", 1)[1]
+                _orig_print(f"DEBUG: {debug_msg}", end=end, file=file, flush=flush)
+            else:
+                _orig_print(msg, end=end, file=file, flush=flush)
         except Exception:
             pass
     elif msg == "RESEND_PRESSED":
@@ -1658,11 +1662,28 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
                     set_input_value(driver, amount_input, str(monto))
                 # select2
                 select_select2_option_choose_varios_or_last(driver, SELECT2_COMBO_CSS, timeout=12)
-                # último Próximo
+                # último Próximo - después de esto aparecerá la pantalla del 2do token
                 prox_el3 = locate_element_across_frames(driver, By.ID, PRIMERO_BTN_ID, timeout=12)
                 if prox_el3:
                     safe_click_element(driver, prox_el3)
-                    time.sleep(3)
+                
+                # Iniciar búsqueda del mail EN PARALELO antes de que aparezca la pantalla del 2do token
+                print("ERROR_DEBUG:Bot empezó a buscar el mail del código de transferencia (búsqueda en paralelo)")
+                transfer_code_result = [None, None]  # [code, exception]
+                
+                def search_mail_thread():
+                    try:
+                        if GMAIL_USER and GMAIL_PASS:
+                            code, uid = get_latest_transfer_code_gmail(user=GMAIL_USER, pwd=GMAIL_PASS, subject_search="Envío de código", timeout_sec=35, poll_every=0)
+                            transfer_code_result[0] = code
+                    except Exception as e:
+                        transfer_code_result[1] = e
+                
+                mail_thread = threading.Thread(target=search_mail_thread, daemon=True)
+                mail_thread.start()
+                
+                # Esperar 3s para que la pantalla del 2do token cargue
+                time.sleep(3)
             except Exception:
                 # si algo falla aquí, consideramos transferencia fallida
                 return (False, cbu_origen_selected)
@@ -1670,23 +1691,29 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
             # if confirm not clicked, no podemos avanzar -> fallo
             return (False, cbu_origen_selected)
 
-        # --- AHORA: volver al mail para leer el código de confirmación de la transferencia ---
+        # --- AHORA: ya estamos en la pantalla del 2do token ---
+        print("ERROR_DEBUG:Bot llegó a la pantalla del segundo token")
+        
+        # Esperar a que la búsqueda del mail termine (máximo 35s desde que empezó)
         transfer_code = ""
         try:
             if GMAIL_USER and GMAIL_PASS:
-                # Espera breve antes de buscar el mail del 2do token
-                time.sleep(1)
-
-                # Intentar UNA vez obtener el código de transferencia (sin reenvíos)
-                try:
-                    # Buscar a máxima frecuencia (sin espera entre polls)
-                    transfer_code, t_uid = get_latest_transfer_code_gmail(user=GMAIL_USER, pwd=GMAIL_PASS, subject_search="Envío de código", timeout_sec=35, poll_every=0)
-                except Exception:
-                    # no llegó el código -> marcar falla
+                # Esperar a que el thread termine (ya lleva ~3s corriendo)
+                mail_thread.join(timeout=32)  # 32s adicionales (total ~35s)
+                
+                if transfer_code_result[0]:
+                    transfer_code = transfer_code_result[0]
+                    print(f"ERROR_DEBUG:Código obtenido: {transfer_code}")
+                elif transfer_code_result[1]:
+                    print(f"ERROR_DEBUG:Error buscando código: {transfer_code_result[1]}")
+                    return (False, cbu_origen_selected)
+                else:
+                    print("ERROR_DEBUG:Timeout esperando código de transferencia")
                     return (False, cbu_origen_selected)
             else:
                 return (False, cbu_origen_selected)
-        except Exception:
+        except Exception as e:
+            print(f"ERROR_DEBUG:Excepción obteniendo código: {e}")
             return (False, cbu_origen_selected)
 
         # Pegar código en input token_cliente
