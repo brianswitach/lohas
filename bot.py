@@ -440,6 +440,7 @@ def get_latest_transfer_code_gmail(user: str, pwd: str, subject_search: str = "E
     Búsqueda optimizada del código de transferencia (igual que antes, pero sin prints).
     """
     start = time.time()
+    print("DEBUG: Buscando código de transferencia en Gmail…")
     M = None
     generic_digits_re = re.compile(r"\b(\d{4,8})\b")
     try:
@@ -447,7 +448,8 @@ def get_latest_transfer_code_gmail(user: str, pwd: str, subject_search: str = "E
         attempt = 0
         while time.time() - start < timeout_sec:
             attempt += 1
-            time.sleep(0.5)
+            print(f"DEBUG: Intento de búsqueda de código (#{attempt})")
+            time.sleep(0 if poll_every <= 0 else poll_every)
             # 1) UNSEEN + SUBJECT
             try:
                 typ, data = imap_search_utf8(M, 'UNSEEN', 'SUBJECT', f'"{subject_search}"')
@@ -470,6 +472,7 @@ def get_latest_transfer_code_gmail(user: str, pwd: str, subject_search: str = "E
                             if m2:
                                 code = m2.group(1)
                         if code and message_time_matches_now(msg_dt):
+                            print(f"DEBUG: Código de transferencia encontrado: {code}")
                             try:
                                 M.logout()
                             except Exception:
@@ -477,7 +480,8 @@ def get_latest_transfer_code_gmail(user: str, pwd: str, subject_search: str = "E
                             return code, uid
                     except Exception:
                         continue
-                time.sleep(poll_every)
+                print(f"DEBUG: No apareció el código todavía (intento #{attempt})")
+                time.sleep(0 if poll_every <= 0 else poll_every)
                 try:
                     M.select("INBOX")
                 except Exception:
@@ -506,6 +510,7 @@ def get_latest_transfer_code_gmail(user: str, pwd: str, subject_search: str = "E
                             if m2:
                                 code = m2.group(1)
                         if code and message_time_matches_now(msg_dt):
+                            print(f"DEBUG: Código de transferencia encontrado: {code}")
                             try:
                                 M.logout()
                             except Exception:
@@ -513,7 +518,8 @@ def get_latest_transfer_code_gmail(user: str, pwd: str, subject_search: str = "E
                             return code, uid
                     except Exception:
                         continue
-                time.sleep(poll_every)
+                print(f"DEBUG: No apareció el código todavía (intento #{attempt})")
+                time.sleep(0 if poll_every <= 0 else poll_every)
                 try:
                     M.select("INBOX")
                 except Exception:
@@ -542,6 +548,7 @@ def get_latest_transfer_code_gmail(user: str, pwd: str, subject_search: str = "E
                             if m2:
                                 code = m2.group(1)
                         if code and message_time_matches_now(msg_dt):
+                            print(f"DEBUG: Código de transferencia encontrado: {code}")
                             try:
                                 M.logout()
                             except Exception:
@@ -549,7 +556,8 @@ def get_latest_transfer_code_gmail(user: str, pwd: str, subject_search: str = "E
                             return code, uid
                     except Exception:
                         continue
-                time.sleep(poll_every)
+                print(f"DEBUG: No apareció el código todavía (intento #{attempt})")
+                time.sleep(0 if poll_every <= 0 else poll_every)
                 try:
                     M.select("INBOX")
                 except Exception:
@@ -580,6 +588,7 @@ def get_latest_transfer_code_gmail(user: str, pwd: str, subject_search: str = "E
                         if m2:
                             code = m2.group(1)
                     if code and message_time_matches_now(msg_dt):
+                        print(f"DEBUG: Código de transferencia encontrado: {code}")
                         try:
                             M.logout()
                         except Exception:
@@ -606,6 +615,7 @@ def get_latest_transfer_code_gmail(user: str, pwd: str, subject_search: str = "E
                     m = TRANSFER_CODE_RE.search(body or "")
                     if m and message_time_matches_now(msg_dt):
                         found_code = m.group(1)
+                        print(f"DEBUG: Código de transferencia encontrado: {found_code}")
                         try:
                             M.logout()
                         except Exception:
@@ -614,7 +624,8 @@ def get_latest_transfer_code_gmail(user: str, pwd: str, subject_search: str = "E
                 except Exception:
                     continue
 
-            time.sleep(poll_every)
+            print(f"DEBUG: No apareció el código todavía (intento #{attempt})")
+            time.sleep(0 if poll_every <= 0 else poll_every)
             try:
                 M.select("INBOX")
             except Exception:
@@ -1668,7 +1679,8 @@ def opcion_b_selenium(cbu_destino: str = "0000155300000000001362", monto: str = 
 
                 # Intentar UNA vez obtener el código de transferencia (sin reenvíos)
                 try:
-                    transfer_code, t_uid = get_latest_transfer_code_gmail(user=GMAIL_USER, pwd=GMAIL_PASS, subject_search="Envío de código", timeout_sec=35, poll_every=3.0)
+                    # Buscar a máxima frecuencia (sin espera entre polls)
+                    transfer_code, t_uid = get_latest_transfer_code_gmail(user=GMAIL_USER, pwd=GMAIL_PASS, subject_search="Envío de código", timeout_sec=35, poll_every=0)
                 except Exception:
                     # no llegó el código -> marcar falla
                     return (False, cbu_origen_selected)
